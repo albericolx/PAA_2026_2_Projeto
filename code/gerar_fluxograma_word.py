@@ -1,6 +1,7 @@
 """
 Gera o documento Word exclusivo contendo o FLUXOGRAMA DE DECISÃO da otimização O(P).
-Inclui tanto o Diagrama Gráfico de Alta Resolução quanto os Blocos Editáveis em Word.
+Inclui o Diagrama Gráfico de Alta Resolução (300 DPI) perfeitamente espaçado e sem sobreposições,
+além dos Blocos Editáveis em formato de tabela Word.
 Autor: José Albérico Rocha da Silva (autor)
 UFRPE 2026.2 - Projeto e Análise de Algoritmos | Profª Jeane Melo
 """
@@ -34,12 +35,16 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
     tcPr.append(tcMar)
 
 def desenhar_fluxograma_imagem(caminho_imagem):
-    """Desenha o fluxograma gráfico profissional com matplotlib em alta resolução (300 DPI)."""
-    fig, ax = plt.subplots(figsize=(10, 13), dpi=300)
+    """
+    Desenha o fluxograma gráfico profissional em alta resolução (300 DPI),
+    com layout vertical expandido (altura 160) garantindo espaçamento perfeito
+    e zero sobreposição entre os blocos finais.
+    """
+    fig, ax = plt.subplots(figsize=(11, 16.5), dpi=300)
     fig.patch.set_facecolor('#0f172a')
     ax.set_facecolor('#0f172a')
     ax.set_xlim(0, 100)
-    ax.set_ylim(0, 130)
+    ax.set_ylim(0, 160)
     ax.axis('off')
 
     def box(x, y, w, h, text, bg, border, fontsize=9.5, bold=True):
@@ -68,77 +73,94 @@ def desenhar_fluxograma_imagem(caminho_imagem):
         )
         if label:
             ax.text((x1 + x2)/2 + offset_x, (y1 + y2)/2 + offset_y, label,
-                    color=label_color, fontsize=9, fontweight='bold', fontfamily='sans-serif', zorder=5)
+                    color=label_color, fontsize=8.5, fontweight='bold', fontfamily='sans-serif', zorder=5)
 
-    # 1. Início
-    box(50, 122, 60, 7, "INICIO: resolver_caso(n, max_pizzas, pedidos)", "#0284c7", "#38bdf8", fontsize=10)
+    def line(x1, y1, x2, y2, color='#38bdf8', width=2):
+        ax.plot([x1, x2], [y1, y2], color=color, linewidth=width, zorder=2)
 
-    # Seta 1
-    arrow(50, 118.5, 50, 112)
+    # -------------------------------------------------------------
+    # 1. INÍCIO
+    # -------------------------------------------------------------
+    box(50, 151, 62, 6.5, "INICIO: resolver_caso(n, max_pizzas, pedidos)", "#0284c7", "#38bdf8", fontsize=10)
+    arrow(50, 147.5, 50, 141)
 
-    # 2. Alocação do Vetor 1D
-    box(50, 108, 64, 8, "1. Alocar Vetor Unidimensional 1D:\ndp = [0] * (max_pizzas + 1)  [Espaco O(P)]", "#1e293b", "#64748b", fontsize=9.5)
+    # -------------------------------------------------------------
+    # 2. ALOCAÇÃO DO VETOR 1D
+    # -------------------------------------------------------------
+    box(50, 137, 66, 7.5, "1. Alocar Vetor 1D em Memoria:\ndp = [0] * (max_pizzas + 1)  [Espaco O(P)]", "#1e293b", "#64748b", fontsize=9.5)
+    arrow(50, 133, 50, 127)
 
-    # Seta 2
-    arrow(50, 104, 50, 97)
+    # -------------------------------------------------------------
+    # 3. LAÇO EXTERNO (PEDIDOS)
+    # -------------------------------------------------------------
+    diamond(50, 120, 54, 13, "2. LACO EXTERNO:\nHa mais pedidos na lista?", "#1e3a8a", "#60a5fa", fontsize=9.5)
 
-    # 3. Laço Externo de Pedidos
-    diamond(50, 91, 52, 12, "2. LACO EXTERNO:\nHa mais pedidos na lista?", "#1e3a8a", "#60a5fa", fontsize=9.5)
+    # Ramo SIM (Processar próximo pedido)
+    arrow(50, 113.5, 50, 107.5, "SIM", "#34d399", offset_x=3)
 
-    # Seta: Fim dos pedidos
-    arrow(76, 91, 88, 91, "NAO", "#94a3b8", offset_y=2)
-    arrow(88, 91, 88, 25)
-    arrow(88, 25, 50, 25)
+    # Ramo NÃO (Fim de todos os pedidos -> Canal externo direito para o retorno final)
+    arrow(77, 120, 90, 120, "NAO", "#94a3b8", offset_y=2.5, offset_x=-1)
+    line(90, 120, 90, 25, color='#94a3b8')
+    arrow(90, 25, 74, 25, label_color='#94a3b8')
 
-    # Seta: Tem mais pedidos
-    arrow(50, 85, 50, 78, "SIM", "#34d399", offset_x=3)
+    # -------------------------------------------------------------
+    # 4. EXTRAÇÃO DO PEDIDO ATUAL E INÍCIO DA VARREDURA
+    # -------------------------------------------------------------
+    box(50, 103, 68, 7.5, "3. Pedido Atual (tempo, pizzas):\nInicializa w = max_pizzas (Varredura Reversa)", "#0f766e", "#2dd4bf", fontsize=9.5)
+    arrow(50, 99, 50, 93.5)
 
-    # 4. Extração do Pedido e Início da Varredura Reversa
-    box(50, 74, 68, 8, "3. Pedido Atual (tempo, pizzas):\nInicializa w = max_pizzas (Varredura Reversa)", "#0f766e", "#2dd4bf", fontsize=9.5)
+    # -------------------------------------------------------------
+    # 5. LAÇO INTERNO: VERIFICAÇÃO DE CAPACIDADE
+    # -------------------------------------------------------------
+    diamond(50, 87, 48, 12, "w >= pizzas?\n(Cabe na bag restante?)", "#7c2d12", "#fb923c", fontsize=9.5)
 
-    # Seta 4
-    arrow(50, 70, 50, 63)
+    # Ramo SIM (Cabe na mochila -> Analisa decisão de Bellman)
+    arrow(50, 81, 50, 75, "SIM", "#34d399", offset_x=3)
 
-    # 5. Verificação da Capacidade
-    diamond(50, 57, 44, 12, "w >= pizzas?\n(Cabe na bag w?)", "#7c2d12", "#fb923c", fontsize=9.5)
+    # Ramo NÃO (w < pizzas -> Fim da varredura deste pedido -> Canal esquerdo externo para próximo pedido)
+    arrow(26, 87, 10, 87, "NAO", "#f87171", offset_y=2.5, offset_x=-1)
+    line(10, 87, 10, 120, color='#f87171')
+    arrow(10, 120, 23, 120)
 
-    # Seta: Não cabe mais
-    arrow(28, 57, 14, 57, "NAO", "#f87171", offset_y=2)
-    arrow(14, 57, 14, 91)
-    arrow(14, 91, 24, 91)
+    # -------------------------------------------------------------
+    # 6. NÓ DE DECISÃO DE BELLMAN
+    # -------------------------------------------------------------
+    diamond(50, 68, 56, 12.5, "4. DECISAO DE BELLMAN:\ndp[w - pizzas] + tempo > dp[w]?", "#4338ca", "#a5b4fc", fontsize=9)
 
-    # Seta: Cabe
-    arrow(50, 51, 50, 44, "SIM", "#34d399", offset_x=3)
+    # Ramo SIM (Vence Levar o Pedido)
+    arrow(22, 68, 22, 58, "SIM (Levar)", "#34d399", offset_x=-14, offset_y=-5)
+    box(22, 53, 38, 7.5, "[SIM] dp[w] = dp[w - pizzas] + tempo\n(Ganha o tempo deste pedido)", "#064e3b", "#34d399", fontsize=8.5)
 
-    # 6. Nó de Decisão de Bellman In-Place
-    diamond(50, 38, 56, 12, "4. DECISAO DE BELLMAN:\ndp[w - pizzas] + tempo > dp[w]?", "#4338ca", "#a5b4fc", fontsize=9)
+    # Ramo NÃO (Vence Manter Decisão Anterior)
+    arrow(78, 68, 78, 58, "NAO (Manter)", "#f87171", offset_x=2, offset_y=-5)
+    box(78, 53, 38, 7.5, "[NAO] dp[w] permanece inalterado\n(Solucao previa ja e melhor)", "#450a0a", "#f87171", fontsize=8.5)
 
-    # Ramo SIM (Esquerda/Verde)
-    arrow(22, 38, 22, 28, "SIM (Vence Levar)", "#34d399", offset_x=-15, offset_y=-5)
-    box(22, 24, 38, 7, "[SIM] dp[w] = dp[w - pizzas] + tempo\n(Ganha tempo do pedido)", "#064e3b", "#34d399", fontsize=8.5)
+    # Confluência para o decremento de w
+    arrow(22, 49, 39, 43)
+    arrow(78, 49, 61, 43)
 
-    # Ramo NÃO (Direita/Vermelho)
-    arrow(78, 38, 78, 28, "NAO (Manter)", "#f87171", offset_x=2, offset_y=-5)
-    box(78, 24, 38, 7, "[NAO] dp[w] permanece inalterado\n(Decisao previa e melhor)", "#450a0a", "#f87171", fontsize=8.5)
+    # -------------------------------------------------------------
+    # 7. BLOCO DE DECREMENTO (w = w - 1)
+    # -------------------------------------------------------------
+    box(50, 40, 44, 6, "Decrementa: w = w - 1", "#334155", "#94a3b8", fontsize=9)
 
-    # Setas confluindo para o decremento
-    arrow(22, 20.5, 38, 14)
-    arrow(78, 20.5, 62, 14)
+    # Retorno do laço interno (Canal intermediário esquerdo x=18)
+    line(28, 40, 18, 40, color='#38bdf8')
+    line(18, 40, 18, 87, color='#38bdf8')
+    arrow(18, 87, 26, 87)
 
-    # 7. Bloco de Decremento de w
-    box(50, 12, 46, 6, "Decrementa: w = w - 1", "#334155", "#94a3b8", fontsize=9)
-
-    # Retorno do loop interno
-    arrow(27, 12, 8, 12)
-    arrow(8, 12, 8, 57)
-    arrow(8, 57, 28, 57)
-
-    # 8. Bloco de Retorno Final
-    box(50, 23, 40, 7, "5. RETORNO OTIMO:\nreturn dp[max_pizzas]", "#065f46", "#34d399", fontsize=10)
+    # -------------------------------------------------------------
+    # 8. BLOCO DE RETORNO DA SOLUÇÃO ÓTIMA (Perfeitamente isolado e visível)
+    # -------------------------------------------------------------
+    box(50, 25, 46, 7.5, "5. RETORNO DA SOLUCAO OTIMA:\nreturn dp[max_pizzas]", "#065f46", "#34d399", fontsize=10)
 
     # Seta para o Fim
-    arrow(50, 19.5, 50, 5)
-    box(50, 3, 30, 5, "FIM DO ALGORITMO", "#0284c7", "#38bdf8", fontsize=9)
+    arrow(50, 21, 50, 14.5)
+
+    # -------------------------------------------------------------
+    # 9. FIM DO ALGORITMO
+    # -------------------------------------------------------------
+    box(50, 11, 32, 5.5, "FIM DO ALGORITMO", "#0284c7", "#38bdf8", fontsize=9.5)
 
     plt.tight_layout()
     plt.savefig(caminho_imagem, facecolor=fig.get_facecolor(), edgecolor='none', bbox_inches='tight')
@@ -216,7 +238,7 @@ def gerar_docx_exclusivo_fluxograma(caminho_docx, caminho_imagem):
         ("BLOCO 2: LAÇO EXTERNO (PEDIDOS)", "1E3A8A",
          "• Comando: for tempo, pizzas in pedidos:\n"
          "• Função: Percorre sequencialmente cada pedido i da pizzaria de 1 até N.\n"
-         "• Se todos os pedidos foram processados: avança diretamente para o Bloco 6 (Retorno)."),
+         "• Se todos os pedidos foram processados: avança diretamente para o Bloco 6 (Retorno da Solução Ótima)."),
 
         ("BLOCO 3: LAÇO INTERNO (VARREDURA REVERSA)", "D97706",
          "• Comando: for w in range(max_pizzas, pizzas - 1, -1):\n"
