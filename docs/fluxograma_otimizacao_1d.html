@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxograma de Tomada de Decisão: Otimização O(P) - BeeCrowd 1286</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --border: #334155;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+            --accent-purple: #c084fc;
+            --accent-orange: #fbbf24;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            max-width: 900px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            color: var(--accent-blue);
+            font-size: 24px;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: var(--accent-green);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        /* Flowchart styling */
+        .flow-node {
+            background: #0f172a;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            position: relative;
+            font-size: 12px;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--accent-blue);
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: -6px;
+            margin-bottom: 6px;
+        }
+
+        .node-start { border-color: var(--accent-blue); background: #082f49; }
+        .node-loop { border-color: var(--accent-orange); background: #451a03; }
+        .node-decision { border-color: var(--accent-purple); background: #2e1065; }
+        .node-action-yes { border-color: var(--accent-green); background: #064e3b; }
+        .node-action-no { border-color: #f87171; background: #450a0a; }
+        .node-end { border-color: var(--accent-green); background: #022c22; font-weight: bold; }
+
+        pre {
+            background: #020617;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            color: #e2e8f0;
+            font-size: 12px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .highlight-yellow { color: #fde047; font-weight: bold; }
+        .highlight-green { color: #86efac; font-weight: bold; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: center;
+        }
+
+        th { background-color: #1e3a8a; color: white; }
+        .cell-best { background-color: #065f46; font-weight: bold; color: #a7f3d0; }
+        .cell-active { background-color: #0369a1; color: white; }
+
+        .btn-print {
+            background-color: var(--accent-blue);
+            color: #0f172a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .btn-print:hover { background-color: #7dd3fc; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🍕 Fluxo de Tomada de Decisão: Otimização Espacial O(P)</h1>
+    <div class="subtitle">PAA 2026.2 — UFRPE | Profª. Drª. Jeane Melo | Discente: José Albérico Rocha da Silva (autor)</div>
+</header>
+
+<div class="container">
+    <!-- COLUNA 1: FLUXOGRAMA DE BLOCOS -->
+    <div class="card">
+        <h2>🧭 Diagrama de Blocos do Algoritmo In-Place</h2>
+
+        <div class="flow-node node-start">
+            <b>1. INÍCIO: resolver_caso(n, max_pizzas, pedidos)</b><br>
+            Aloca vetor 1D: <code>dp = [0] * (max_pizzas + 1)</code> (Memória: O(P))
+        </div>
+
+        <div class="flow-arrow">▼</div>
+
+        <div class="flow-node node-loop">
+            <b>2. LAÇO EXTERNO: para cada (tempo, pizzas) em pedidos</b><br>
+            Analisa cada pedido individualmente (de i = 1 até N).
+        </div>
+
+        <div class="flow-arrow">▼</div>
+
+        <div class="flow-node node-loop" style="border-left: 5px solid var(--accent-orange);">
+            <b>3. LAÇO INTERNO: w de max_pizzas descendo até pizzas</b><br>
+            <span class="highlight-yellow">★ PONTO CRÍTICO: Varredura DECRESCENTE (Direita ➔ Esquerda)</span><br>
+            Garante que o pedido seja considerado no máximo 1 vez (0-1)!
+        </div>
+
+        <div class="flow-arrow">▼</div>
+
+        <div class="flow-node node-decision">
+            <b>4. NÓ DE DECISÃO DE BELLMAN:</b><br>
+            <code>if dp[w - pizzas] + tempo > dp[w]:</code>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div class="flow-node node-action-yes" style="margin-bottom: 0;">
+                <b style="color: var(--accent-green);">[SIM: LEVAR O PEDIDO]</b><br>
+                <code>dp[w] = dp[w - pizzas] + tempo</code><br>
+                <i>Ganha o tempo e ocupa pizzas</i>
+            </div>
+            <div class="flow-node node-action-no" style="margin-bottom: 0;">
+                <b style="color: #f87171;">[NÃO: MANTER ANTERIOR]</b><br>
+                <code>dp[w] permanece inalterado</code><br>
+                <i>Decisão prévia já é melhor</i>
+            </div>
+        </div>
+
+        <div class="flow-arrow">▼</div>
+
+        <div class="flow-node node-start">
+            <b>5. DECREMENTO: w = w - 1</b><br>
+            Continua até w atingir (pizzas - 1). Em seguida, próximo pedido!
+        </div>
+
+        <div class="flow-arrow">▼</div>
+
+        <div class="flow-node node-end">
+            <b>6. RETORNO ÓTIMO: return dp[max_pizzas]</b><br>
+            Valor ótimo global final no índice máximo da capacidade!
+        </div>
+    </div>
+
+    <!-- COLUNA 2: CÓDIGO E POR QUE É DECRESCENTE -->
+    <div class="card">
+        <h2>💻 Código Fonte e Racional Matemático</h2>
+
+        <pre><code>def resolver_caso(n, max_pizzas, pedidos):
+    # Vetor unidimensional compacto (O(P))
+    dp = [0] * (max_pizzas + 1)
+    
+    for tempo, pizzas in pedidos:
+        # Varredura decrescente (preserva 0-1)
+        for w in range(max_pizzas, pizzas - 1, -1):
+            if dp[w - pizzas] + tempo > dp[w]:
+                dp[w] = dp[w - pizzas] + tempo
+                
+    return dp[max_pizzas]</code></pre>
+
+        <h2 style="margin-top: 16px;">❓ Por que a Varredura DEVE ser Decrescente?</h2>
+        <div style="font-size: 12px; line-height: 1.5; color: var(--text-muted);">
+            <p>Se varrêssemos para frente (<code>w = pizzas ... max_pizzas</code>):</p>
+            <div style="background: #450a0a; border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; color: #fecaca; margin-bottom: 8px;">
+                <b>❌ Erro da Mochila Ilimitada:</b><br>
+                Em <code>w = 2</code>, calcularia <code>dp[2] = 20</code>.<br>
+                Em <code>w = 4</code>, consultaria <code>dp[4-2] = dp[2]</code> (que já virou 20 nesta rodada) e somaria de novo: <code>20 + 20 = 40</code>! O mesmo pedido seria multiplicado!
+            </div>
+            <p>Ao varrer para trás (<code>w = max_pizzas ... pizzas</code>):</p>
+            <div style="background: #064e3b; border-left: 3px solid #10b981; padding: 6px 10px; border-radius: 4px; color: #a7f3d0;">
+                <b>✅ Rigor da Mochila 0-1:</b><br>
+                Ao atualizar <code>dp[w]</code>, o valor em <code>dp[w - pizzas]</code> ainda é do <b>estágio anterior (i-1)</b>, garantindo que cada pedido seja adicionado no máximo <b>1 vez</b>!
+            </div>
+        </div>
+
+        <h2 style="margin-top: 16px;">📊 Evolução do Vetor no Caso 1 (N=4, P=10)</h2>
+        <table>
+            <tr>
+                <th>Estágio</th>
+                <th>w=0</th><th>w=2</th><th>w=5</th><th>w=7</th><th>w=9</th><th>w=10</th>
+            </tr>
+            <tr>
+                <td>Base 0</td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr>
+                <td>Após P1 (20m, 5pz)</td>
+                <td>0</td><td>0</td><td>20</td><td>20</td><td>20</td><td>20</td>
+            </tr>
+            <tr>
+                <td>Após P2 (70m, 7pz)</td>
+                <td>0</td><td>0</td><td>20</td><td>70</td><td>70</td><td>70</td>
+            </tr>
+            <tr>
+                <td>Após P3 (15m, 2pz)</td>
+                <td>0</td><td>15</td><td>20</td><td>70</td><td>85</td><td>85</td>
+            </tr>
+            <tr>
+                <td>Após P4 (25m, 3pz)</td>
+                <td>0</td><td>15</td><td>40</td><td>70</td><td>85</td><td class="cell-best">95 min</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<button class="btn-print" onclick="window.print()">🖨️ Imprimir / Salvar em PDF para Slides</button>
+
+</body>
+</html>
