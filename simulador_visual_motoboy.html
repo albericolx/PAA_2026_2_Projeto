@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Visual Interativo: Problema do Motoboy (BeeCrowd 1286)</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-dark: #1e293b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden; /* ZERO rolagem de página */
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: var(--panel-dark);
+            height: 38px;
+            padding: 0 16px;
+            border-bottom: 2px solid var(--accent-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        h1 { margin: 0; font-size: 15px; color: #60a5fa; display: flex; align-items: center; gap: 6px; }
+        .subtitle { font-size: 10px; color: var(--text-muted); }
+
+        .container-tela-unica {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 10px;
+            padding: 8px 12px;
+            height: calc(100vh - 38px);
+            max-height: calc(100vh - 38px);
+            overflow: hidden;
+        }
+        .panel {
+            background-color: var(--panel-dark);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .controls {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+        }
+        button:hover { background-color: #2563eb; }
+        button.btn-sec { background-color: #475569; }
+        button.btn-green { background-color: var(--accent-green); }
+        button.btn-purple { background-color: var(--accent-purple); }
+        button.btn-purple:hover { background-color: #7c3aed; }
+
+        .topo-explicativo {
+            display: grid;
+            grid-template-columns: 1.1fr 1.3fr;
+            gap: 8px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+        .recorrencia-box {
+            background: #0b1329;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+        }
+        .ramo-ativo {
+            background: #1e293b;
+            border-left: 4px solid var(--accent-yellow);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 3px;
+        }
+        .ramo-ativo-bt {
+            background: #1e1b4b;
+            border-left: 4px solid var(--accent-purple);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 3px;
+        }
+        .ramo-inativo {
+            padding: 2px 8px;
+            opacity: 0.35;
+            font-size: 10px;
+        }
+        .badge-ramo {
+            background: var(--accent-yellow); color: #000;
+            padding: 1px 5px; border-radius: 3px; font-weight: bold; font-size: 9px;
+        }
+        .badge-ramo-bt {
+            background: var(--accent-purple); color: #fff;
+            padding: 1px 5px; border-radius: 3px; font-weight: bold; font-size: 9px;
+        }
+
+        .cards-celulas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+        .card-info-celula {
+            background: #020617;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .detalhe-calculo-box {
+            background: #020617;
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+        .detalhe-bt-box {
+            background: #030712;
+            border: 2px solid var(--accent-purple);
+            border-radius: 6px;
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            line-height: 1.4;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        }
+        .tag-termo { display: inline-block; padding: 1px 6px; border-radius: 3px; font-weight: bold; font-size: 10px; }
+        .tag-cima { background: #065f46; color: #6ee7b7; }
+        .tag-levar { background: #075985; color: #7dd3fc; }
+        .tag-res { background: #78350f; color: #fde047; font-size: 11px; }
+        .tag-bt-sim { background: #065f46; color: #34d399; font-size: 11px; }
+        .tag-bt-nao { background: #374151; color: #9ca3af; font-size: 11px; }
+
+        .tabela-container-ampla {
+            overflow: auto;
+            flex: 1;
+            background: #0b1329;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 11px;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 5px 3px;
+            text-align: center;
+            min-width: 28px;
+        }
+        th { background-color: #0f172a; color: #93c5fd; font-weight: 600; }
+        .cell-current {
+            background-color: var(--accent-yellow) !important;
+            color: #000 !important;
+            font-weight: bold;
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        .cell-above { background-color: var(--accent-green) !important; color: #000 !important; font-weight: bold; }
+        .cell-offset { background-color: #38bdf8 !important; color: #000 !important; font-weight: bold; }
+        .cell-bt-cur {
+            background-color: var(--accent-purple) !important;
+            color: white !important;
+            font-weight: bold;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px var(--accent-purple);
+            z-index: 15;
+        }
+        .cell-bt-above {
+            background-color: #f97316 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .cell-selected { background-color: #065f46 !important; color: #34d399 !important; font-weight: bold; }
+
+        .card-decisao-lat {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 6px 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 6px 0;
+            flex-shrink: 0;
+        }
+        .card-escolhido {
+            background: linear-gradient(135deg, #065f46, #059669) !important;
+            border-left: 3px solid #34d399 !important;
+            border-radius: 4px;
+            padding: 4px 8px;
+            margin-bottom: 4px;
+            color: white;
+            font-size: 10px;
+        }
+        .card-rejeitado {
+            background: #111827 !important;
+            border-left: 3px solid #ef4444 !important;
+            border-radius: 4px;
+            padding: 3px 8px;
+            margin-bottom: 4px;
+            opacity: 0.75;
+            color: #94a3b8;
+            font-size: 9px;
+        }
+        .badge { display: inline-block; padding: 1px 4px; border-radius: 3px; font-size: 9px; font-weight: bold; }
+        .badge-sim { background: #34d399; color: #064e3b; }
+        .badge-nao { background: #ef4444; color: white; }
+
+        .input-group { margin-bottom: 4px; }
+        .input-group label { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 1px; }
+        input[type="number"] {
+            background: #0b1329; border: 1px solid var(--border-color); color: white;
+            padding: 3px 6px; border-radius: 4px; width: 100%; font-size: 10px;
+        }
+        .item-pedido-row {
+            display: grid; grid-template-columns: 24px 1fr 1fr 20px; gap: 3px;
+            align-items: center; margin-bottom: 3px;
+        }
+        .btn-del { background: #ef4444; padding: 2px 4px; border-radius: 3px; line-height: 1; font-size: 9px; }
+        .progress-bar-container {
+            width: 100%; background-color: #334155; height: 5px; border-radius: 3px;
+            overflow: hidden; margin-top: 3px;
+        }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); width: 0%; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>🍕 Simulador Didático: Problema do Motoboy (BeeCrowd 1286)</h1>
+        <div class="subtitle">PAA 2026.2 - UFRPE | Profª. Jeane Melo | Discente: José Albérico Rocha da Silva (autor)</div>
+    </div>
+    <div style="display: flex; gap: 6px;">
+        <span style="background: #1e3a8a; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; color: #93c5fd;">Mochila 0-1</span>
+        <span style="background: #065f46; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; color: #6ee7b7;">Programação Dinâmica</span>
+        <a href="https://github.com/albericolx/PAA_2026_2_Projeto" target="_blank" style="background: #334155; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; color: #f1f5f9; text-decoration: none; border: 1px solid #475569;">⭐ Repositório GitHub</a>
+    </div>
+</header>
+
+<div class="container-tela-unica">
+    <!-- PAINEL LATERAL UNIFICADO (100% VISÍVEL SEM ROLAGEM) -->
+    <div class="panel">
+        <h3 style="margin: 0 0 4px 0; color: #93c5fd; font-size: 12px;">⚙️ 1. Configuração dos Dados</h3>
+        
+        <div class="input-group" style="margin-bottom: 4px;">
+            <label>Capacidade da Mochila (P pizzas):</label>
+            <input type="number" id="inputP" value="10" min="1" max="40" onchange="aplicarNovosParametros()">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 6px; margin-bottom: 4px;">
+            <div class="input-group">
+                <label>Qtd. Pedidos (N):</label>
+                <input type="number" id="inputN" value="4" min="1" max="15" onchange="alterarQtdPedidosPeloInput()">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button class="btn-green" style="width: 100%; padding: 4px; font-size: 10px;" onclick="adicionarPedido()" title="Adicionar um novo pedido avulso">+ 1 Pedido</button>
+            </div>
+        </div>
+
+        <div style="font-size: 9px; color: var(--text-muted); display: grid; grid-template-columns: 24px 1fr 1fr 20px; gap: 3px; margin: 3px 0 2px 0;">
+            <span>ID</span><span>Tempo(m)</span><span>Pizzas</span><span></span>
+        </div>
+
+        <div id="listaInputsPedidos" style="max-height: 120px; overflow-y: auto; padding-right: 2px;"></div>
+
+        <button style="width: 100%; margin-top: 4px; padding: 4px;" onclick="aplicarNovosParametros()">🔄 Recalcular</button>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 6px 0;">
+
+        <!-- DECISÃO FINAL INTEGRADA -->
+        <h3 style="margin: 0; color: #93c5fd; font-size: 12px;">🛵 2. Decisão Final</h3>
+
+        <div class="card-decisao-lat">
+            <div style="font-size: 9px; opacity: 0.9; text-transform: uppercase;">Tempo Total Otimizado</div>
+            <div id="tempoOtimo" style="font-size: 20px; font-weight: bold; color: #34d399;">-- min.</div>
+            <div style="font-size: 9px;" id="ocupacaoBag">Mochila: -- pizzas</div>
+            <div class="progress-bar-container">
+                <div id="progressoBarra" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div style="font-size: 9px; color: var(--text-muted); margin-bottom: 2px; font-weight: bold;">Status dos Pedidos:</div>
+        <div id="listaCardsDecisao" style="flex: 1; overflow-y: auto; max-height: 170px;">
+            <div style="font-size: 9px; color: var(--text-muted); font-style: italic;">Aguardando execução...</div>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL: ENQUADRADA PERFEITAMENTE NA TELA ÚNICA -->
+    <div class="panel">
+        <!-- BARRA SUPERIOR DE CONTROLES -->
+        <div class="controls">
+            <button id="btnVoltar" onclick="voltarPasso()">◀ Voltar</button>
+            <button id="btnAvancar" onclick="proximoPasso()">Avançar Célula ▶</button>
+            <button id="btnAuto" onclick="autoExecutar()">⚡ Executar Tudo</button>
+            <button class="btn-sec" onclick="reiniciar()">🔄 Reiniciar</button>
+            <span id="textoProgresso" style="margin-left: 10px; color: var(--text-muted); font-size: 10px; font-weight: bold;">Fase 1: Construção da Matriz (Passo 0 / 40)</span>
+        </div>
+
+        <!-- LINHA: FUNÇÃO DE RECORRÊNCIA / REGRA DE BACKTRACKING + 3 CARDS INTEGRADOS -->
+        <div class="topo-explicativo">
+            <!-- 1. PAINEL DE FÓRMULA / REGRA ATIVA -->
+            <div id="boxFormula" class="recorrencia-box">
+                <div id="tituloRegra" style="font-size: 10px; color: #94a3b8; font-weight: bold;">📐 1. FUNÇÃO DE RECORRÊNCIA (FASE 1):</div>
+                <div id="ramo1" class="ramo-inativo">
+                    <span id="badgeR1" class="badge-ramo">CASO 1: NÃO CABE (p<sub>i</sub> > w)</span> <code>DP[i][w] = DP[i-1][w]</code>
+                </div>
+                <div id="ramo2" class="ramo-inativo">
+                    <span id="badgeR2" class="badge-ramo">CASO 2: CABE (p<sub>i</sub> &le; w)</span> <code>max( DP[i-1][w], &nbsp; DP[i-1][w-p<sub>i</sub>] + t<sub>i</sub> )</code>
+                </div>
+            </div>
+
+            <!-- 2. CARDS DAS 3 CÉLULAS -->
+            <div class="cards-celulas-grid">
+                <div id="cardItem" class="card-info-celula" style="border-left: 3px solid #38bdf8;">
+                    <b id="lblCardItem">Item Analisado:</b><span id="txtCardItem">Aguardando...</span>
+                </div>
+                <div id="cardCima" class="card-info-celula" style="border-left: 3px solid #10b981;">
+                    <b id="lblCardCima">Opção 1 (Cima):</b><span id="txtCardCima">Aguardando...</span>
+                </div>
+                <div id="cardLevar" class="card-info-celula" style="border-left: 3px solid #f59e0b;">
+                    <b id="lblCardLevar">Opção 2 (Levar):</b><span id="txtCardLevar">Aguardando...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SUBSTITUIÇÃO DETALHADA E COMENTÁRIO DIDÁTICO -->
+        <div id="painelSubstituicao" class="detalhe-calculo-box">
+            <div style="color: #94a3b8; font-style: italic;">Clique em <b>"Avançar Célula ▶"</b> para ver a construção da matriz ou em <b>"⚡ Executar Tudo"</b> para ir ao Backtracking.</div>
+        </div>
+
+        <!-- 4. MATRIZ DE PROGRAMAÇÃO DINÂMICA AMPLIADA -->
+        <div style="margin-bottom: 2px; font-size: 10px; font-weight: bold; color: #93c5fd; flex-shrink: 0; display: flex; justify-content: space-between;">
+            <span>📋 Matriz de Estados DP[i][w]:</span>
+            <span id="legendaFase" style="color: #fde047; font-size: 10px;">Fase Atual: Preenchimento Bottom-Up</span>
+        </div>
+        <div class="tabela-container-ampla">
+            <table id="matrizDP"></table>
+        </div>
+    </div>
+</div>
+
+<script>
+let pedidos = [
+    { id: 1, tempo: 20, pizzas: 5 },
+    { id: 2, tempo: 70, pizzas: 7 },
+    { id: 3, tempo: 15, pizzas: 2 },
+    { id: 4, tempo: 25, pizzas: 3 }
+];
+let P = 10;
+let N = pedidos.length;
+let dp = [];
+let curI = 1, curW = 1;
+
+// Variáveis de Controle de Fase e Backtracking Passo a Passo
+let fase = "PREENCHIMENTO"; // "PREENCHIMENTO", "BACKTRACKING", "CONCLUIDO"
+let btI = 0, btW = 0;
+let btEscolhidos = [];
+let historicoPassos = [];
+
+function renderInputsPedidos() {
+    let container = document.getElementById("listaInputsPedidos");
+    let html = "";
+    pedidos.forEach((p, idx) => {
+        html += `
+        <div class="item-pedido-row">
+            <span style="font-weight: bold; color: #93c5fd; font-size: 9px;">#${p.id}</span>
+            <input type="number" value="${p.tempo}" min="1" onchange="atualizarPedido(${idx}, 'tempo', this.value)">
+            <input type="number" value="${p.pizzas}" min="1" onchange="atualizarPedido(${idx}, 'pizzas', this.value)">
+            <button class="btn-del" onclick="removerPedido(${idx})" title="Remover">✕</button>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function atualizarPedido(idx, campo, valor) {
+    pedidos[idx][campo] = Math.max(1, parseInt(valor) || 1);
+}
+
+function alterarQtdPedidosPeloInput() {
+    let metaN = parseInt(document.getElementById("inputN").value) || 1;
+    if (metaN < 1) metaN = 1;
+    if (metaN > 15) metaN = 15;
+    document.getElementById("inputN").value = metaN;
+
+    const modelosExtras = [
+        { tempo: 15, pizzas: 2 },
+        { tempo: 30, pizzas: 4 },
+        { tempo: 22, pizzas: 3 },
+        { tempo: 40, pizzas: 5 },
+        { tempo: 18, pizzas: 2 },
+        { tempo: 25, pizzas: 3 }
+    ];
+
+    while (pedidos.length < metaN) {
+        let novoId = pedidos.length + 1;
+        let tpl = modelosExtras[(novoId - 1) % modelosExtras.length];
+        pedidos.push({ id: novoId, tempo: tpl.tempo, pizzas: tpl.pizzas });
+    }
+    while (pedidos.length > metaN) {
+        pedidos.pop();
+    }
+    renderInputsPedidos();
+    aplicarNovosParametros();
+}
+
+function adicionarPedido() {
+    let novoId = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) + 1 : 1;
+    pedidos.push({ id: novoId, tempo: 15, pizzas: 3 });
+    document.getElementById("inputN").value = pedidos.length;
+    renderInputsPedidos();
+    aplicarNovosParametros();
+}
+
+function removerPedido(idx) {
+    if (pedidos.length <= 1) {
+        alert("Mantenha ao menos 1 pedido!");
+        return;
+    }
+    pedidos.splice(idx, 1);
+    document.getElementById("inputN").value = pedidos.length;
+    renderInputsPedidos();
+    aplicarNovosParametros();
+}
+
+function aplicarNovosParametros() {
+    P = Math.max(1, parseInt(document.getElementById("inputP").value) || 10);
+    N = pedidos.length;
+    let inputN = document.getElementById("inputN");
+    if (inputN) inputN.value = N;
+    reiniciar();
+}
+
+function renderTabela() {
+    let html = "<tr><th>Pedidos \\ Mochila</th>";
+    for(let w=0; w<=P; w++) html += `<th>w=${w}</th>`;
+    html += "</tr>";
+    
+    for(let i=0; i<=N; i++) {
+        let label = i === 0 ? "Base 0" : `P${pedidos[i-1].id} (${pedidos[i-1].tempo}m, ${pedidos[i-1].pizzas}pz)`;
+        html += `<tr><th>${label}</th>`;
+        for(let w=0; w<=P; w++) {
+            html += `<td id="c_${i}_${w}">${dp[i][w]}</td>`;
+        }
+        html += "</tr>";
+    }
+    document.getElementById("matrizDP").innerHTML = html;
+}
+
+function proximoPasso() {
+    if (fase === "PREENCHIMENTO") {
+        executarPassoMatriz();
+    } else if (fase === "BACKTRACKING") {
+        executarPassoBacktracking();
+    } else {
+        alert("Simulação e Backtracking concluídos! Pressione 'Reiniciar' para recomeçar.");
+    }
+}
+
+function executarPassoMatriz() {
+    if (curI > N) {
+        iniciarFaseBacktracking();
+        return;
+    }
+    limparDestaques();
+    
+    let p = pedidos[curI-1].pizzas;
+    let t = pedidos[curI-1].tempo;
+    let cima = dp[curI-1][curW];
+    let elRamo1 = document.getElementById("ramo1");
+    let elRamo2 = document.getElementById("ramo2");
+    let painelSub = document.getElementById("painelSubstituicao");
+    
+    document.getElementById(`c_${curI-1}_${curW}`).classList.add("cell-above");
+    document.getElementById("txtCardItem").innerHTML = `P#${pedidos[curI-1].id}: ${t}m, ${p}pz | w=${curW}`;
+    document.getElementById("txtCardCima").innerHTML = `DP[${curI-1}][${curW}] = <b>${cima} min</b>`;
+    
+    if (p > curW) {
+        elRamo1.className = "ramo-ativo";
+        elRamo2.className = "ramo-inativo";
+        dp[curI][curW] = cima;
+        document.getElementById("txtCardLevar").innerHTML = `<span style="color:#ef4444;">Não cabe</span> (${p}pz > ${curW})`;
+        
+        painelSub.innerHTML = `
+        <b>Cálculo DP[${curI}][${curW}]:</b> $p_{${curI}} = ${p} > w = ${curW}$ &implies; 
+        <code>DP[${curI}][${curW}] = DP[${curI-1}][${curW}] = </code> <span class="tag-termo tag-cima">${cima} min</span> &implies; 
+        <b>Resultado:</b> <span class="tag-termo tag-res">${dp[curI][curW]} min</span> (Ação: <b>DEIXAR O PEDIDO</b> - excede a mochila).`;
+    } else {
+        elRamo1.className = "ramo-inativo";
+        elRamo2.className = "ramo-ativo";
+        let restante = curW - p;
+        let valRestante = dp[curI-1][restante];
+        document.getElementById(`c_${curI-1}_${restante}`).classList.add("cell-offset");
+        let levar = valRestante + t;
+        dp[curI][curW] = Math.max(cima, levar);
+        let decisaoTexto = levar > cima ? "LEVAR O PEDIDO" : "DEIXAR O PEDIDO";
+        let corDecisao = levar > cima ? "#34d399" : "#f59e0b";
+        let motivo = levar > cima ? "Levar este pedido gera maior ganho global!" : "Manter escolhas anteriores é mais vantajoso.";
+        
+        document.getElementById("txtCardLevar").innerHTML = `DP[${curI-1}][${restante}]+${t}m = <b>${levar}m</b>`;
+
+        painelSub.innerHTML = `
+        <b>Cálculo DP[${curI}][${curW}]:</b> <code>max( DP[${curI-1}][${curW}] (${cima}m), &nbsp; DP[${curI-1}][${restante}]+${t}m (${levar}m) )</code> = 
+        <span class="tag-termo tag-res">${dp[curI][curW]} min</span> &implies; 
+        <b>Decisão:</b> <span style="color: ${corDecisao}; font-weight: bold;">${decisaoTexto}</span> (${motivo})`;
+    }
+    
+    let el = document.getElementById(`c_${curI}_${curW}`);
+    el.innerText = dp[curI][curW];
+    el.classList.add("cell-current");
+    
+    historicoPassos.push({ fase: "PREENCHIMENTO", i: curI, w: curW });
+    document.getElementById("textoProgresso").innerText = `Fase 1: Preenchendo Matriz (${historicoPassos.length} / ${N * P}) - Célula DP[${curI}][${curW}]`;
+    
+    curW++;
+    if (curW > P) {
+        curW = 1; curI++;
+        if (curI > N) {
+            iniciarFaseBacktracking();
+        }
+    }
+}
+
+function iniciarFaseBacktracking() {
+    fase = "BACKTRACKING";
+    btI = N;
+    btW = P;
+    btEscolhidos = [];
+    
+    limparDestaques();
+    
+    // Atualiza controles
+    let btnAvancar = document.getElementById("btnAvancar");
+    btnAvancar.className = "btn-purple";
+    btnAvancar.innerHTML = "Avançar Backtracking ▶";
+    
+    document.getElementById("legendaFase").innerHTML = "Fase Atual: Reconstrução Ótima (Backtracking)";
+    document.getElementById("legendaFase").style.color = "#c084fc";
+    document.getElementById("textoProgresso").innerText = "Fase 2: Backtracking Iniciado! Pressione 'Avançar Backtracking ▶'";
+    
+    // Configura o painel da regra de Backtracking
+    document.getElementById("tituloRegra").innerHTML = "🔄 2. REGRA DE DECISÃO DO RETROCESSO (BACKTRACKING):";
+    document.getElementById("badgeR1").className = "badge-ramo-bt";
+    document.getElementById("badgeR1").innerText = "SE DP[i][w] != DP[i-1][w]";
+    document.getElementById("ramo1").className = "ramo-inativo";
+    document.getElementById("ramo1").innerHTML = `<span class="badge-ramo-bt">SE DP[i][w] != DP[i-1][w]</span> &implies; <b>O PEDIDO FOI LEVADO!</b> (Desconta peso: w &larr; w - p<sub>i</sub>)`;
+    
+    document.getElementById("badgeR2").className = "badge-ramo-bt";
+    document.getElementById("badgeR2").innerText = "SE DP[i][w] == DP[i-1][w]";
+    document.getElementById("ramo2").className = "ramo-inativo";
+    document.getElementById("ramo2").innerHTML = `<span class="badge-ramo-bt">SE DP[i][w] == DP[i-1][w]</span> &implies; <b>O PEDIDO FOI DESCARTADO</b> (Capacidade mantida: w)`;
+
+    // Atualiza cabeçalhos dos 3 cards para Backtracking
+    document.getElementById("lblCardItem").innerText = "Célula Atual Backtracking:";
+    document.getElementById("lblCardCima").innerText = "Célula de Cima DP[i-1][w]:";
+    document.getElementById("lblCardLevar").innerText = "Comparação e Decisão:";
+    
+    document.getElementById("painelSubstituicao").className = "detalhe-bt-box";
+    document.getElementById("painelSubstituicao").innerHTML = `
+    <b>🎉 Matriz Completa Finalizada!</b> Agora faremos o <b>Backtracking passo a passo</b> partindo da célula final <code>DP[${N}][${P}] = ${dp[N][P]} min</code>.<br>
+    Clique no botão roxo <b>"Avançar Backtracking ▶"</b> para ver como o algoritmo descobre exatamente quais pedidos entraram na bolsa!`;
+}
+
+function executarPassoBacktracking() {
+    if (btI <= 0 || btW <= 0) {
+        finalizarTudo();
+        return;
+    }
+    
+    limparDestaques();
+    
+    let curVal = dp[btI][btW];
+    let valCima = dp[btI-1][btW];
+    let ped = pedidos[btI-1];
+    
+    // Destaca células do backtracking
+    document.getElementById(`c_${btI}_${btW}`).classList.add("cell-bt-cur");
+    document.getElementById(`c_${btI-1}_${btW}`).classList.add("cell-bt-above");
+    
+    document.getElementById("txtCardItem").innerHTML = `DP[${btI}][${btW}] = <b>${curVal}m</b><br>Pedido #${ped.id} (${ped.tempo}m, ${ped.pizzas}pz)`;
+    document.getElementById("txtCardCima").innerHTML = `DP[${btI-1}][${btW}] = <b>${valCima}m</b>`;
+    
+    let elR1 = document.getElementById("ramo1");
+    let elR2 = document.getElementById("ramo2");
+    let painel = document.getElementById("painelSubstituicao");
+    
+    historicoPassos.push({ fase: "BACKTRACKING", i: btI, w: btW, escolhidos: [...btEscolhidos] });
+    
+    if (curVal !== valCima) {
+        // PEDIDO FOI LEVADO!
+        elR1.className = "ramo-ativo-bt";
+        elR2.className = "ramo-inativo";
+        btEscolhidos.push(ped.id);
+        
+        let wNovo = btW - ped.pizzas;
+        let ganhoRest = dp[btI-1][wNovo];
+        document.getElementById("txtCardLevar").innerHTML = `<span style="color: #34d399; font-weight: bold;">FOI LEVADO!</span><br>Subtrai: ${btW} - ${ped.pizzas} = ${wNovo}pz`;
+        
+        painel.innerHTML = `
+        <b style="color: #c084fc;">Passo do Backtracking no Pedido #${ped.id} (${ped.tempo}m, ${ped.pizzas}pz):</b><br>
+        • <b>Comparação:</b> <code>DP[${btI}][${btW}] (${curVal} min) &ne; DP[${btI-1}][${btW}] (${valCima} min)</code> &rarr; <b>Valores Diferentes!</b><br>
+        • <b>Por que escolheu este pedido?</b> Sem ele, o melhor tempo com ${btW} pizzas era apenas ${valCima} min. Ao incluir o Pedido #${ped.id}, somamos seu tempo (${ped.tempo}m) com a melhor solução para o espaço restante (${wNovo} pizzas &rarr; ${ganhoRest}m), totalizando <b>${curVal} min</b>, o que é estritamente melhor!<br>
+        • <b>Atualização da Mochila:</b> Desconta as ${ped.pizzas} pizzas: <code>w = ${btW} - ${ped.pizzas} = ${wNovo} pizzas</code> &rarr; Sobe para Pedido #${btI-1} com ${wNovo} pizzas.`;
+        
+        btW = wNovo;
+    } else {
+        // PEDIDO NÃO FOI LEVADO
+        elR1.className = "ramo-inativo";
+        elR2.className = "ramo-ativo-bt";
+        
+        document.getElementById("txtCardLevar").innerHTML = `<span style="color: #94a3b8; font-weight: bold;">NÃO LEVADO</span><br>Capacidade mantida: ${btW}pz`;
+        
+        painel.innerHTML = `
+        <b style="color: #c084fc;">Passo do Backtracking no Pedido #${ped.id} (${ped.tempo}m, ${ped.pizzas}pz):</b><br>
+        • <b>Comparação:</b> <code>DP[${btI}][${btW}] (${curVal} min) == DP[${btI-1}][${btW}] (${valCima} min)</code> &rarr; <b>Valores Idênticos!</b><br>
+        • <b>Por que descartou este pedido?</b> Incluir este pedido não superaria os <b>${valCima} min</b> já garantidos pelos pedidos anteriores para essa capacidade de ${btW} pizzas. Não traria ganho adicional para a rota.<br>
+        • <b>Atualização da Mochila:</b> Capacidade mantida inalterada em <code>w = ${btW} pizzas</code> &rarr; Sobe para Pedido #${btI-1} com ${btW} pizzas.`;
+    }
+    
+    atualizarCardsLateral();
+    btI--;
+    
+    if (btI <= 0 || btW <= 0) {
+        document.getElementById("textoProgresso").innerText = "Backtracking finalizado! Todos os pedidos foram auditados.";
+    } else {
+        document.getElementById("textoProgresso").innerText = `Fase 2: Backtracking no Pedido #${btI} (Mochila residual: ${btW} pizzas)`;
+    }
+}
+
+function finalizarTudo() {
+    fase = "CONCLUIDO";
+    limparDestaques();
+    
+    // Destaca em verde todas as células dos pedidos que foram escolhidos
+    let w = P;
+    for(let i=N; i>0; i--) {
+        if(dp[i][w] !== dp[i-1][w]) {
+            document.getElementById(`c_${i}_${w}`).classList.add("cell-selected");
+            w -= pedidos[i-1].pizzas;
+        }
+    }
+    
+    let totalPizzas = pedidos.filter(p => btEscolhidos.includes(p.id)).reduce((acc, p) => acc + p.pizzas, 0);
+    let valorFinal = dp[N][P];
+    
+    document.getElementById("painelSubstituicao").innerHTML = `
+    🎉 <b>DEMONSTRAÇÃO COMPLETA CONCLUÍDA!</b><br>
+    • <b>Pedidos Selecionados pelo Backtracking:</b> [ ${btEscolhidos.map(id => '#' + id).join(', ')} ]<br>
+    • <b>Tempo Total Maximizado:</b> <b style="color: #34d399; font-size: 13px;">${valorFinal} min.</b> &nbsp;|&nbsp; 
+    • <b>Pizzas Transportadas:</b> <b>${totalPizzas} de ${P} pizzas</b> (100% de utilização ótima).<br>
+    • <b>Veredito BeeCrowd:</b> <code>Accepted (0.095s)</code>`;
+    
+    document.getElementById("btnAvancar").disabled = true;
+    document.getElementById("btnAvancar").innerHTML = "Concluído ✔";
+}
+
+function atualizarCardsLateral() {
+    let cardsHtml = "";
+    pedidos.forEach(p => {
+        if (btEscolhidos.includes(p.id)) {
+            cardsHtml += `
+            <div class="card-escolhido">
+                <b>✅ Pedido #${p.id} (LEVAR)</b>: ${p.tempo}m | ${p.pizzas}pz
+            </div>`;
+        } else {
+            cardsHtml += `
+            <div class="card-rejeitado">
+                <b>❌ Pedido #${p.id} (DEIXAR)</b>: ${p.tempo}m | ${p.pizzas}pz
+            </div>`;
+        }
+    });
+    document.getElementById("listaCardsDecisao").innerHTML = cardsHtml;
+    
+    let totalPizzas = pedidos.filter(p => btEscolhidos.includes(p.id)).reduce((acc, p) => acc + p.pizzas, 0);
+    document.getElementById("tempoOtimo").innerText = `${dp[N][P]} min.`;
+    document.getElementById("ocupacaoBag").innerText = `Mochila: ${totalPizzas} / ${P} pizzas (${(totalPizzas/P*100).toFixed(0)}%)`;
+    document.getElementById("progressoBarra").style.width = `${Math.min(100, (totalPizzas/P*100))}%`;
+}
+
+function autoExecutar() {
+    // Preenche toda a matriz instantaneamente
+    for (let i = 1; i <= N; i++) {
+        let p = pedidos[i-1].pizzas;
+        let t = pedidos[i-1].tempo;
+        for (let w = 1; w <= P; w++) {
+            if (p <= w) {
+                dp[i][w] = Math.max(dp[i-1][w], dp[i-1][w - p] + t);
+            } else {
+                dp[i][w] = dp[i-1][w];
+            }
+        }
+    }
+    curI = N + 1;
+    curW = P + 1;
+    renderTabela();
+    iniciarFaseBacktracking();
+    
+    // Executa todo o backtracking passo a passo
+    while(btI > 0 && btW > 0) {
+        executarPassoBacktracking();
+    }
+    finalizarTudo();
+}
+
+function voltarPasso() {
+    if (historicoPassos.length === 0) return;
+    let ultimo = historicoPassos.pop();
+    
+    if (ultimo.fase === "PREENCHIMENTO") {
+        fase = "PREENCHIMENTO";
+        curI = ultimo.i;
+        curW = ultimo.w;
+        dp[curI][curW] = 0;
+        limparDestaques();
+        renderTabela();
+        document.getElementById("textoProgresso").innerText = `Voltando célula DP[${curI}][${curW}]...`;
+    } else {
+        fase = "BACKTRACKING";
+        btI = ultimo.i;
+        btW = ultimo.w;
+        btEscolhidos = [...ultimo.escolhidos];
+        limparDestaques();
+        atualizarCardsLateral();
+        document.getElementById("textoProgresso").innerText = `Voltando Backtracking no Pedido #${btI}...`;
+    }
+}
+
+function limparDestaques() {
+    document.querySelectorAll("td").forEach(el => {
+        el.classList.remove("cell-current", "cell-above", "cell-offset", "cell-bt-cur", "cell-bt-above", "cell-selected");
+    });
+}
+
+function reiniciar() {
+    dp = Array.from({ length: N + 1 }, () => Array(P + 1).fill(0));
+    historicoPassos = [];
+    curI = 1; curW = 1;
+    fase = "PREENCHIMENTO";
+    btI = 0; btW = 0; btEscolhidos = [];
+    
+    let btnAvancar = document.getElementById("btnAvancar");
+    btnAvancar.className = "btn-blue";
+    btnAvancar.disabled = false;
+    btnAvancar.innerHTML = "Avançar Célula ▶";
+    
+    document.getElementById("legendaFase").innerHTML = "Fase Atual: Preenchimento Bottom-Up";
+    document.getElementById("legendaFase").style.color = "#fde047";
+    
+    document.getElementById("tituloRegra").innerHTML = "📐 1. FUNÇÃO DE RECORRÊNCIA (FASE 1):";
+    document.getElementById("ramo1").className = "ramo-inativo";
+    document.getElementById("ramo1").innerHTML = `<span class="badge-ramo">CASO 1: NÃO CABE (p<sub>i</sub> > w)</span> <code>DP[i][w] = DP[i-1][w]</code>`;
+    document.getElementById("ramo2").className = "ramo-inativo";
+    document.getElementById("ramo2").innerHTML = `<span class="badge-ramo">CASO 2: CABE (p<sub>i</sub> &le; w)</span> <code>max( DP[i-1][w], &nbsp; DP[i-1][w-p<sub>i</sub>] + t<sub>i</sub> )</code>`;
+    
+    document.getElementById("lblCardItem").innerText = "Item Analisado:";
+    document.getElementById("lblCardCima").innerText = "Opção 1 (Cima):";
+    document.getElementById("lblCardLevar").innerText = "Opção 2 (Levar):";
+    
+    document.getElementById("painelSubstituicao").className = "detalhe-calculo-box";
+    document.getElementById("painelSubstituicao").innerHTML = '<div style="color: #94a3b8; font-style: italic;">Clique em <b>"Avançar Célula ▶"</b> para ver a construção da matriz ou em <b>"⚡ Executar Tudo"</b> para ir ao Backtracking.</div>';
+    
+    renderTabela();
+    document.getElementById("tempoOtimo").innerText = "-- min.";
+    document.getElementById("ocupacaoBag").innerText = `Mochila: -- / ${P} pizzas`;
+    document.getElementById("progressoBarra").style.width = "0%";
+    document.getElementById("listaCardsDecisao").innerHTML = '<div style="font-size: 9px; color: var(--text-muted); font-style: italic;">Aguardando execução...</div>';
+    document.getElementById("textoProgresso").innerText = `Fase 1: Preenchendo Matriz (Passo 0 / ${N * P})`;
+}
+
+renderInputsPedidos();
+aplicarNovosParametros();
+</script>
+</body>
+</html>

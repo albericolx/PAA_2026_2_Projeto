@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Resolução Otimizada do Problema do Motoboy (BeeCrowd 1286) via Programação Dinâmica</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin-top: 3.5cm;
+    margin-bottom: 2.5cm;
+    margin-left: 3.0cm;
+    margin-right: 3.0cm;
+  }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    line-height: 1.25;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    text-align: justify;
+  }
+
+  /* 16pt bold, centered, 12pt space before */
+  .title {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 12pt;
+    margin-bottom: 12pt;
+    line-height: 1.2;
+  }
+
+  /* 12pt bold, centered */
+  .author {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 6pt;
+  }
+
+  /* 12pt, centered, 12pt space after */
+  .address {
+    font-size: 12pt;
+    text-align: center;
+    margin-bottom: 6pt;
+    line-height: 1.2;
+  }
+
+  /* Courier New, 10pt, 6pt before and after */
+  .email {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    text-align: center;
+    margin-top: 6pt;
+    margin-bottom: 18pt;
+  }
+
+  /* Resumo e Abstract: 12pt, indented 0.8cm on both margins */
+  .abstract-box {
+    margin-left: 0.8cm;
+    margin-right: 0.8cm;
+    margin-bottom: 12pt;
+    font-size: 12pt;
+    text-align: justify;
+    line-height: 1.2;
+  }
+
+  .abstract-title {
+    font-weight: bold;
+    display: inline;
+  }
+
+  /* Section titles: bold, 13pt, flush left, 12pt space before */
+  h1 {
+    font-size: 13pt;
+    font-weight: bold;
+    margin-top: 16pt;
+    margin-bottom: 6pt;
+    text-align: left;
+  }
+
+  /* Subsection titles: bold, 12pt, flush left */
+  h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+    text-align: left;
+  }
+
+  /* Paragraphs: first paragraph has no indent, subsequent paragraphs indented 1.27cm, 6pt space before */
+  p {
+    margin-top: 6pt;
+    margin-bottom: 0;
+    text-indent: 1.27cm;
+  }
+
+  p.no-indent {
+    text-indent: 0;
+  }
+
+  .formula {
+    text-align: center;
+    text-indent: 0;
+    font-style: italic;
+    margin: 8pt 0;
+    font-size: 12pt;
+  }
+
+  /* Captions: Helvetica/Arial, 10pt, boldface, 6pt before and after */
+  .table-caption {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10pt;
+    margin-bottom: 6pt;
+    text-indent: 0;
+  }
+
+  .figure-caption {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 6pt;
+    margin-bottom: 12pt;
+    text-indent: 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6pt;
+    font-size: 10.5pt;
+    text-indent: 0;
+  }
+
+  th, td {
+    border: 1px solid #333;
+    padding: 4px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+  }
+
+  .figure-box {
+    text-align: center;
+    margin-top: 12pt;
+    text-indent: 0;
+  }
+
+  .figure-box img {
+    max-width: 90%;
+    height: auto;
+    border: 1px solid #999;
+  }
+
+  pre {
+    background-color: #fbfbfb;
+    border: 1px solid #ccc;
+    padding: 6pt;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9.5pt;
+    line-height: 1.2;
+    text-indent: 0;
+    margin: 6pt 0;
+  }
+
+  /* References: 12pt, 6pt before, hanging indent 0.5cm */
+  .references {
+    font-size: 12pt;
+    text-indent: 0;
+  }
+
+  .ref-item {
+    margin-top: 6pt;
+    margin-bottom: 0;
+    margin-left: 0.5cm;
+    text-indent: -0.5cm;
+    text-align: justify;
+  }
+</style>
+</head>
+<body>
+
+<div class="title">
+  Resolução Otimizada do Problema do Motoboy (BeeCrowd 1286) via Programação Dinâmica: Estudo de Caso da Mochila Binária
+</div>
+
+<div class="author">
+  José Albérico Rocha da Silva
+</div>
+
+<div class="address">
+  Departamento de Computação – Universidade Federal Rural de Pernambuco (UFRPE)<br>
+  Segunda Verificação de Aprendizagem – Projeto e Análise de Algoritmos (PAA) – 2026.2<br>
+  Docente: Profª. Drª. Jeane Melo | Tema 6: BeeCrowd Problema 1286: Motoboy
+</div>
+
+<div class="email">
+  alberico.silva@ufrpe.br
+</div>
+
+<div class="abstract-box">
+  <span class="abstract-title">Abstract.</span>
+  This paper presents the modeling and computational solution for problem 1286 (Motoboy) from the BeeCrowd platform, structured according to the SBC template. The problem models a courier who must maximize total delivery working time subject to a maximum pizza carrying capacity. We establish the reduction of this scenario to the classical 0-1 Knapsack Problem (NP-complete). We discuss why greedy and brute-force methods fail, substantiating Dynamic Programming as the optimal paradigm. The solution was implemented in Python 3 with O(P) space optimization. We present asymptotic complexity proofs, step-by-step matrix traces, backtracking subset reconstruction, verified acceptance in the online judge, and compliance with CNPq Ordinance No. 2,664/2026.
+</div>
+
+<div class="abstract-box">
+  <span class="abstract-title">Resumo.</span>
+  Este artigo descreve a modelagem e a resolução computacional do problema 1286 (Motoboy) da plataforma BeeCrowd, em conformidade com o modelo da SBC. O desafio consiste em maximizar o tempo total de trabalho diário de um entregador de pizzas sob uma restrição de capacidade de transporte no baú da motocicleta. Demonstra-se que o problema mapeia-se à Mochila Binária 0-1. Analisa-se a falha de heurísticas gulosas e de força bruta, justificando a escolha da Programação Dinâmica. A solução foi codificada em Python 3 com otimização espacial em O(P). São apresentadas provas assintóticas O(N&middot;P), rastreamento de matrizes, recuperação de pedidos por retrocesso (backtracking), comprovação de aceite no juiz eletrônico e conformidade com a Portaria nº 2.664/2026 do CNPq.
+</div>
+
+<h1>1. Introdução e Contextualização do Problema</h1>
+<p class="no-indent">
+No problema 1286 do BeeCrowd (<em>Motoboy</em>), somos apresentados a José, entregador de uma pizzaria que recebe diariamente uma listagem com <em>N</em> pedidos (1 &le; <em>N</em> &le; 20). Cada pedido <em>i</em> possui duas grandezas determinísticas associadas: o tempo de entrega <em>t<sub>i</sub></em> &gt; 0 (em minutos), correspondendo ao ganho obtido por José ao realizar aquela rota, e a quantidade de pizzas demandadas <em>p<sub>i</sub></em> &gt; 0, que representa a ocupação física no baú de sua motocicleta.
+</p>
+<p>
+A motocicleta dispõe de uma capacidade máxima de transporte de <em>P</em> pizzas simultâneas (1 &le; <em>P</em> &le; 30). Cada pedido <em>i</em> só pode ser atendido de forma integral ou completamente recusado (não é permitida a partição de encomendas). O objetivo consiste em selecionar o subconjunto de pedidos que maximize o tempo total de entregas sem ultrapassar a capacidade <em>P</em> do baú.
+</p>
+<p>
+Na computação aplicada e engenharia logística, este problema modela o carregamento ótimo de contêineres e frotas de carga com limites de peso e volume, alocação de tarefas em máquinas virtuais sob restrição de memória e núcleos de processamento em computação em nuvem, e gestão de portfólio de investimentos financeiros sob restrições orçamentárias de capital (Kleinberg e Tardos 2006).
+</p>
+
+<h1>2. Modelagem Matemática do Problema</h1>
+<p class="no-indent">
+O problema mapeia-se de forma isomórfica ao <strong>Problema da Mochila Binária (0-1 Knapsack Problem)</strong>. Seja <em>S</em> = {1, 2, ..., <em>N</em>} o conjunto indexado de pedidos. Para cada pedido <em>i</em> &isin; <em>S</em>, definem-se o ganho <em>t<sub>i</sub></em>, o peso <em>p<sub>i</sub></em> e a variável binária de decisão <em>x<sub>i</sub></em> &isin; {0, 1}, onde <em>x<sub>i</sub></em> = 1 denota aceitação do pedido e <em>x<sub>i</sub></em> = 0 recusa. O modelo de programação inteira binária é expresso por:
+</p>
+
+<div class="formula">
+  Maximizar Z = &sum;<sub>i=1</sub><sup>N</sup> (t<sub>i</sub> &middot; x<sub>i</sub>) &emsp; sujeito a: &sum;<sub>i=1</sub><sup>N</sup> (p<sub>i</sub> &middot; x<sub>i</sub>) &le; P, &emsp; com x<sub>i</sub> &isin; {0, 1}
+</div>
+
+<h1>3. A Técnica Utilizada: Programação Dinâmica</h1>
+
+<h2>3.1 Por que Abordagens Alternativas Falham?</h2>
+<p class="no-indent">
+A busca exaustiva por força bruta testa todos os 2<sup><em>N</em></sup> subconjuntos possíveis, incorrendo em custo exponencial <em>O</em>(2<sup><em>N</em></sup>) impraticável para instâncias moderadas (Cormen et al. 2012). Abordagens gulosas baseadas na razão ganho/custo (<em>t<sub>i</sub></em> / <em>p<sub>i</sub></em>) funcionam apenas na Mochila Fracionária; na Mochila Binária 0-1, a indivisibilidade gera capacidade ociosa residual no baú.
+</p>
+<p>
+Por exemplo: para capacidade <em>P</em> = 10 e três pedidos com razão idêntica 10 min/pizza (Pedido A: 60 min, 6 piz; Pedido B: 50 min, 5 piz; Pedido C: 50 min, 5 piz), a heurística gulosa escolhe o Pedido A e para (sobram 4 pizzas), totalizando 60 min. A escolha ótima global consiste em levar os Pedidos B e C, ocupando 5 + 5 = 10 pizzas e alcançando 100 min.
+</p>
+
+<h2>3.2 A Equação de Recorrência de Bellman</h2>
+<p class="no-indent">
+A Programação Dinâmica fundamenta-se nos princípios de <strong>Subestrutura Ótima</strong> e <strong>Subproblemas Sobrepostos</strong>. Seja <em>DP</em>[<em>i</em>][<em>w</em>] o tempo máximo alcançável considerando os primeiros <em>i</em> pedidos sob capacidade parcial de <em>w</em> pizzas:
+</p>
+<p>
+<strong>Casos Base:</strong> <em>DP</em>[0][<em>w</em>] = 0 para todo <em>w</em> (zero pedidos geram zero minutos) e <em>DP</em>[<em>i</em>][0] = 0 para todo <em>i</em> (baú com zero vagas não transporta pizzas).
+</p>
+<p>
+<strong>Transição de Estados de Bellman:</strong> Para o pedido <em>i</em> com atributos (<em>t<sub>i</sub></em>, <em>p<sub>i</sub></em>):
+</p>
+<div class="formula">
+  DP[i][w] = DP[i-1][w], &emsp; se p<sub>i</sub> &gt; w (o pedido não cabe)
+</div>
+<div class="formula">
+  DP[i][w] = max( DP[i-1][w], &ensp; t<sub>i</sub> + DP[i-1][w - p<sub>i</sub>] ), &emsp; se p<sub>i</sub> &le; w (o pedido cabe)
+</div>
+
+<h2>3.3 Rastreamento Analítico da Matriz (Caso 1: N = 4, P = 10)</h2>
+<p class="no-indent">
+Considerando os pedidos do Caso 1 oficial (Pedido 1: 20 min, 5 piz; Pedido 2: 70 min, 7 piz; Pedido 3: 15 min, 2 piz; Pedido 4: 25 min, 3 piz), a Tabela 1 ilustra a matriz <em>DP</em>[<em>i</em>][<em>w</em>] preenchida elemento a elemento:
+</p>
+
+<div class="table-caption">Tabela 1. Matriz completa de Programação Dinâmica DP[i][w] para N=4 e P=10</div>
+<table>
+  <thead>
+    <tr>
+      <th>i \ w</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>0 (base)</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td><strong>1 (20m, 5p)</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td></tr>
+    <tr><td><strong>2 (70m, 7p)</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>20</td><td>70</td><td>70</td><td>70</td><td>70</td></tr>
+    <tr><td><strong>3 (15m, 2p)</strong></td><td>0</td><td>0</td><td>15</td><td>15</td><td>15</td><td>20</td><td>20</td><td>70</td><td>70</td><td>85</td><td>85</td></tr>
+    <tr><td><strong>4 (25m, 3p)</strong></td><td>0</td><td>0</td><td>15</td><td>25</td><td>25</td><td>40</td><td>40</td><td>70</td><td>70</td><td>85</td><td><strong>95</strong></td></tr>
+  </tbody>
+</table>
+
+<p class="no-indent">
+<strong>Decisão Ótima por Retrocesso (Backtracking):</strong> Partindo de <em>DP</em>[4][10] = 95:
+<br>1. <em>DP</em>[4][10] &ne; <em>DP</em>[3][10] (95 &ne; 85) &rArr; <strong>Pedido #4 Selecionado!</strong> Capacidade restante: 10 &minus; 3 = 7 pizzas.
+<br>2. <em>DP</em>[3][7] = <em>DP</em>[2][7] (70 = 70) &rArr; <strong>Pedido #3 Descartado!</strong> Capacidade mantida em 7 pizzas.
+<br>3. <em>DP</em>[2][7] &ne; <em>DP</em>[1][7] (70 &ne; 20) &rArr; <strong>Pedido #2 Selecionado!</strong> Capacidade restante: 7 &minus; 7 = 0 pizzas.
+<br>4. Capacidade esgotada: Conjunto ótimo <strong>{Pedido #2, Pedido #4}</strong> com 95 minutos e 10 pizzas (100% de utilização).
+</p>
+
+<h1>4. Implementação Computacional em Python 3</h1>
+<p class="no-indent">
+Para a submissão de alto desempenho, reduziu-se a matriz a um único vetor unidimensional de tamanho <em>P</em>+1. O detalhe fundamental de projeto consiste em iterar as capacidades em <strong>ordem decrescente</strong> (de <em>P</em> descendo até <em>p<sub>i</sub></em>), garantindo que cada pedido seja usado no máximo uma vez:
+</p>
+
+<pre>
+def resolver_caso(n, max_pizzas, pedidos):
+    dp = [0] * (max_pizzas + 1)
+    for tempo, pizzas in pedidos:
+        for w in range(max_pizzas, pizzas - 1, -1):
+            if dp[w - pizzas] + tempo > dp[w]:
+                dp[w] = dp[w - pizzas] + tempo
+    return dp[max_pizzas]
+</pre>
+
+<h1>5. Análise de Complexidade Assintótica</h1>
+<p class="no-indent">
+<strong>Complexidade Temporal:</strong> O algoritmo preenche <em>N</em> estágios com varredura de até <em>P</em> capacidades sob custo <em>O</em>(1), resultando em <strong>&Theta;(<em>N</em> &middot; <em>P</em>)</strong>. É classificada como <strong>pseudo-polinomial</strong> (polinomial no valor numérico de <em>P</em>). Para os limites do BeeCrowd (<em>N</em> &le; 20, <em>P</em> &le; 30), executam-se no máximo 600 operações elementares (&lt; 0.001 s).
+</p>
+<p>
+<strong>Complexidade Espacial:</strong> A versão otimizada armazena unicamente o arranjo <em>dp</em> de dimensão <em>P</em> + 1, resultando em complexidade estritamente <strong><em>O</em>(<em>P</em>)</strong> (apenas 31 inteiros em memória para <em>P</em> = 30).
+</p>
+
+<h1>6. Resultados Experimentais e Validação no BeeCrowd</h1>
+<p class="no-indent">
+O código-fonte foi submetido na plataforma BeeCrowd sob a linguagem Python 3.9, obtendo o veredito oficial <strong>Accepted</strong> com tempo de execução de <strong>0.095s</strong> (limite: 1.000s) e tamanho de 2,49 KB sob a Submissão # 50429092, realizada em 07/11/2026 às 10:23:03. A Figura 1 comprova o aceite oficial emitido pelo juiz eletrônico:
+</p>
+
+<div class="figure-box">
+  <img src="C:/Users/Windows 10/.gemini/antigravity/brain/956bfd38-5e5e-44e4-b291-94e33df23d78/.user_uploaded/media_1794057869926_31a27693.png" alt="Print de Aceite BeeCrowd">
+</div>
+<div class="figure-caption">Figura 1. Tela de aceite (Accepted) do Problema 1286 (Motoboy) emitida pelo juiz eletrônico do BeeCrowd.</div>
+
+<h1>7. Considerações Finais</h1>
+<p class="no-indent">
+A Programação Dinâmica confirmou-se como a abordagem exata e eficiente para o Problema da Mochila 0-1, contornando a complexidade exponencial da força bruta e a falibilidade das abordagens gulosas. A otimização espacial em <em>O</em>(<em>P</em>) e o procedimento de retrocesso consolidam os fundamentos teóricos e práticos de Projeto e Análise de Algoritmos.
+</p>
+
+<h1>Declaração de Uso de IA Generativa (Portaria nº 2.664/2026 – CNPq)</h1>
+<p class="no-indent">
+Em cumprimento ao Artigo 9º da Portaria nº 2.664/2026 do CNPq, declara-se que a ferramenta Google Antigravity / Gemini 3.8 Flash foi empregada como suporte auxiliar na concepção teórica, estruturação do artigo conforme o template SBC e revisão analítica da complexidade assintótica. A implementação computacional, testes, depuração e validação experimental foram executados e são de integral responsabilidade autoral do discente <strong>José Albérico Rocha da Silva</strong>.
+</p>
+
+<h1>References</h1>
+<div class="references">
+  <div class="ref-item">BeeCrowd (2026) “Problema 1286: Motoboy”, BeeCrowd Academic Online Judge, Disponível em: &lt;https://judge.beecrowd.com/pt/problems/view/1286&gt;, Acesso em: 07 nov. 2026.</div>
+  <div class="ref-item">Bellman, R. (1954) “The theory of dynamic programming”, <em>Bulletin of the American Mathematical Society</em>, v. 60, n. 6, p. 503-515.</div>
+  <div class="ref-item">CNPq (2026) “Portaria nº 2.664, de 6 de março de 2026: Diretrizes para uso de Inteligência Artificial Generativa em atividades de pesquisa e submissão acadêmica”, Brasília: MCTI/CNPq.</div>
+  <div class="ref-item">Cormen, T. H., Leiserson, C. E., Rivest, R. L. e Stein, C. (2012) <em>Algoritmos: teoria e prática</em>, 3ª edição, Rio de Janeiro: Elsevier.</div>
+  <div class="ref-item">Karp, R. M. (1972) “Reducibility among combinatorial problems”, In: Miller, R. E., Thatcher, J. W. (Ed.), <em>Complexity of Computer Computations</em>, New York: Plenum Press, p. 85-103.</div>
+  <div class="ref-item">Kleinberg, J. e Tardos, É. (2006) <em>Algorithm design</em>, Boston: Pearson/Addison-Wesley.</div>
+  <div class="ref-item">SBC (2024) “Instructions for Authors of SBC Conferences Papers and Abstracts”, Sociedade Brasileira de Computação, Porto Alegre.</div>
+</div>
+
+</body>
+</html>

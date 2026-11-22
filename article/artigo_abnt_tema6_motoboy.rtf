@@ -1,0 +1,90 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046
+{\fonttbl{\f0\froman\fcharset0 Times New Roman;}{\f1\fswiss\fcharset0 Arial;}{\f2\fmodern\fcharset0 Courier New;}}
+{\colortbl ;\red0\green0\blue0;\red0\green102\blue204;\red46\green139\blue87;}
+\paperw11906\paperh16838\margl1701\margr1134\margt1701\margb1134
+\widowctrl\qj\sl360\slmult1
+
+\pard\qc\sl240\slmult1{\f1\b\fs32 RESOLUÇÃO OTIMIZADA DO PROBLEMA DO MOTOBOY (BEECROWD 1286) VIA PROGRAMAÇÃO DINÂMICA: ESTUDO DE CASO DA MOCHILA BINÁRIA}\par
+\vspace{240}
+\pard\qc\sl240\slmult1{\f1\fs22\b José Albérico Rocha da Silva}\par
+{\f1\fs20 Departamento de Computação – Universidade Federal Rural de Pernambuco (UFRPE)\par
+Disciplina: Projeto e Análise de Algoritmos (PAA) – 2026.2\par
+Docente: Profª. Drª. Jeane Melo\par
+Tema: Tema 6 – BeeCrowd Problema 1286: Motoboy}\par
+\vspace{360}
+
+\pard\ql\sl240\slmult1{\f1\b\fs22 RESUMO}\par
+\pard\qj\sl240\slmult1{\f1\fs22 Este artigo apresenta a formulação teórica, a modelagem matemática e a implementação computacional orientada à resolução do problema 1286 (\i Motoboy\i0) da plataforma BeeCrowd, fundamentando-se nas normas da ABNT para redação científica. O problema modela a tomada de decisão logística de um entregador que visa maximizar o tempo total de trabalho em entregas diárias, condicionado a uma restrição volumétrica de capacidade de transporte de pizzas. Demonstra-se a redução formal deste cenário ao Problema da Mochila Binária (\i 0-1 Knapsack Problem\i0), NP-completo. Avalia-se a inaptidão de heurísticas gulosas e da busca por força bruta, justificando a adoção do paradigma de Programação Dinâmica (\i Bottom-Up\i0). O algoritmo foi implementado em linguagem Python 3, incorporando a dedução da equação de Bellman e otimização de espaço em memória para complexidade O(P) por meio de varredura decrescente. São fornecidas provas de complexidade assintótica temporal O(N * P), rastreamento analítico elemento a elemento da matriz de estados, recuperação de solução ótima por retrocesso (\i backtracking\i0), comprovação de aceite experimental no juiz eletrônico e a declaração de integridade acadêmica referente à Portaria nº 2.664/2026 do CNPq.}\par
+\vspace{120}
+\pard\qj\sl240\slmult1{\f1\fs22\b Palavras-chave:\b0  Projeto e análise de algoritmos. Programação dinâmica. Problema da mochila binária. BeeCrowd 1286. Normas ABNT. Python 3.}\par
+\vspace{240}
+
+\pard\ql\sl240\slmult1{\f1\b\fs22 ABSTRACT}\par
+\pard\qj\sl240\slmult1{\f1\fs22 This paper presents the theoretical formulation, mathematical modeling, and computational implementation aimed at solving problem 1286 (\i Motoboy\i0) from the BeeCrowd platform, structured according to academic and ABNT standards. The problem models the operational decision-making of a delivery courier aiming to maximize total delivery working time subject to a strict motorcycle carrying capacity. We establish the formal reduction of this scenario to the classical 0-1 Knapsack Problem, which belongs to the NP-complete class. We evaluate the failure of greedy heuristics and brute-force approaches, thereby substantiating the adoption of the Dynamic Programming paradigm (Bottom-Up). The algorithm was coded in Python 3, applying Bellman's optimality equation and memory optimization down to O(P) via reverse array traversal. Asymptotic time complexity proofs O(N * P), step-by-step state matrix deductions, optimal subset reconstruction through backtracking, experimental acceptance verification from the online judge, and compliance with CNPq Ordinance No. 2,664/2026 are thoroughly documented.}\par
+\vspace{120}
+\pard\qj\sl240\slmult1{\f1\fs22\b Keywords:\b0  Design and analysis of algorithms. Dynamic programming. 0-1 knapsack problem. BeeCrowd 1286. ABNT standards. Python 3.}\par
+\vspace{360}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 1 INTRODUÇÃO E CONTEXTUALIZAÇÃO DO PROBLEMA}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 No problema 1286 do BeeCrowd (\i Motoboy\i0), somos apresentados ao cenário operacional de José, entregador de uma pizzaria que recebe diariamente uma listagem com N pedidos. Cada pedido i possui duas grandezas determinísticas: o tempo de entrega t_i (minutos) e a quantidade de pizzas demandadas p_i. A motocicleta dispõe de uma capacidade máxima de transporte P pizzas. Cada pedido só pode ser atendido de forma integral ou completamente recusado (não é permitida a partição). O objetivo consiste em selecionar o subconjunto de pedidos que maximize o tempo total de entregas sem ultrapassar a capacidade P.}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 As aplicações dessa modelagem no mundo real incluem: logística de carregamento de veículos de entrega com restrição de cubagem, alocação de tarefas em máquinas virtuais sob restrição de memória e núcleos de processamento, e seleção ótima de portfólio de investimentos financeiros com orçamento de capital limitado.}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 2 MODELAGEM MATEMÁTICA DO PROBLEMA}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 O problema em estudo mapeia-se de forma isomórfica ao Problema da Mochila Binária (0-1 Knapsack Problem). Seja S = \{1, 2, ..., N\} o conjunto de pedidos indexados. Para cada pedido i, definem-se o ganho t_i > 0, o peso p_i > 0 e a variável binária x_i em \{0, 1\}, onde x_i = 1 indica aceite do pedido e x_i = 0 indica recusa.}\par
+\pard\qc\sl360\slmult1{\f1\fs24 Maximizar Z = \sum (t_i * x_i), sujeito a: \sum (p_i * x_i) \le P, com x_i em \{0, 1\}}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 3 ANÁLISE DA TÉCNICA: PROGRAMAÇÃO DINÂMICA}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 Métodos elementares revelam-se inaptos: a busca exaustiva (força bruta) incorre em custo exponencial O(2^N). Heurísticas gulosas (como ordenar pela razão tempo/pizzas t_i / p_i) falham devido à indivisibilidade dos pedidos, gerando capacidade ociosa residual. A Programação Dinâmica resolve essa questão ao satisfazer duas propriedades essenciais: Subestrutura Ótima e Subproblemas Sobrepostos.}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 Cada célula DP[i][w] armazena o tempo máximo de entrega considerando os primeiros i pedidos para uma capacidade hipotética w. Os casos base são estritamente nulos: DP[0][w] = 0 (com zero pedidos não há minutos acumulados) e DP[i][0] = 0 (com capacidade zero nenhuma pizza é transportada). A transição de estados de Bellman é governada por:}\par
+\pard\qc\sl360\slmult1{\f1\fs24 DP[i][w] = DP[i-1][w], se p_i > w (pedido não cabe)}\par
+\pard\qc\sl360\slmult1{\f1\fs24 DP[i][w] = max( DP[i-1][w], t_i + DP[i-1][w - p_i] ), se p_i \le w}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 4 IMPLEMENTAÇÃO COMPUTACIONAL EM PYTHON 3 E DECISÕES DE PROJETO}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 Para otimização de memória, a matriz bidimensional (N+1) x (P+1) foi compactada em um único vetor unidimensional de dimensão P+1. O detalhe crítico de engenharia consiste em iterar a capacidade w em ordem decrescente (de P até p_i), garantindo que cada pedido só seja considerado no máximo uma vez por viagem. A leitura rápida é assegurada por sys.stdin.read().split().}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 A reconstrução da solução ótima é realizada por retrocesso (Backtracking): partindo da célula final DP[N][P], se DP[i][w] != DP[i-1][w], o pedido i foi obrigatoriamente incluído, decrementando a capacidade w = w - p_i.}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 5 ANÁLISE DE COMPLEXIDADE ASSINTÓTICA}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 A complexidade temporal assintótica é Theta(N * P). Por ser proporcional ao valor numérico da capacidade P, é classificada teoricamente como pseudo-polinomial. Para os limites do BeeCrowd (N \le 20, P \le 30), o algoritmo executa no máximo 600 operações elementares, processadas em menos de 0,001 segundos. A complexidade espacial na versão otimizada é O(P), consumindo apenas 31 inteiros na memória RAM.}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 6 RESULTADOS EXPERIMENTAIS E VALIDAÇÃO NO BEECROWD}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 No Caso de Teste 1 oficial (N=4, P=10 pizzas; Pedido 1: 20m, 5p; Pedido 2: 70m, 7p; Pedido 3: 15m, 2p; Pedido 4: 25m, 3p), a célula final DP[4][10] atinge 95 minutos. O backtracking recupera os Pedidos #2 e #4, totalizando exatamente 10 pizzas (100% de aproveitamento do baú).}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 O algoritmo foi submetido oficialmente ao juiz eletrônico BeeCrowd sob a linguagem Python 3.9:}\par
+\pard\ql\sl300\slmult1\li720{\f1\fs22 • Número da Submissão: # 50429092\par
+• Problema: 1286 - Motoboy\par
+• Status / Veredito: \b Accepted\b0\par
+• Tempo de Execução: 0.095 segundos (limite permitido: 1.000s)\par
+• Tamanho do Código: 2,49 KB\par
+• Data e Horário: 07/11/2026 às 10:23:03}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 7 CONSIDERAÇÕES FINAIS}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs24 O projeto demonstrou a superioridade da Programação Dinâmica sobre algoritmos gulosos e força bruta para a Mochila 0-1, alcançando solução ótima global em tempo pseudo-polinomial com consumo de memória mínimo. O domínio da equação de recorrência e do procedimento de retrocesso consolidam os objetivos formativos da disciplina de Projeto e Análise de Algoritmos.}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 DECLARAÇÃO DE USO DE INTELIGÊNCIA ARTIFICIAL GENERATIVA (PORTARIA Nº 2.664/2026 – CNPQ)}\par
+\pard\qj\sl360\slmult1\fi720{\f1\fs22 Em cumprimento ao Artigo 9º da Portaria nº 2.664/2026 do CNPq, declara-se que a ferramenta Google Antigravity / Gemini 3.8 Flash foi utilizada como suporte auxiliar nas etapas de concepção teórica, estruturação da redação segundo normas da ABNT e conferência analítica da complexidade assintótica. A implementação, testes, depuração e validação experimental foram executados e são de integral responsabilidade autoral do discente José Albérico Rocha da Silva.}\par
+\vspace{240}
+
+\pard\ql\sl360\slmult1{\f1\b\fs24 REFERÊNCIAS (CONFORME NORMA ABNT NBR 6023:2018)}\par
+\vspace{120}
+\pard\ql\sl280\slmult1{\f1\fs22 ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). \b NBR 6022\b0: informação e documentação: artigo em publicação periódica técnica e/ou científica: apresentação. Rio de Janeiro: ABNT, 2018.\par
+\vspace{120}
+BEECROWD. \b Problema 1286: Motoboy\b0. BeeCrowd Academic Online Judge, 2026. Disponível em: https://judge.beecrowd.com/pt/problems/view/1286. Acesso em: 07 nov. 2026.\par
+\vspace{120}
+BELLMAN, Richard. The theory of dynamic programming. \b Bulletin of the American Mathematical Society\b0, Providence, v. 60, n. 6, p. 503-515, 1954.\par
+\vspace{120}
+CONSELHO NACIONAL DE DESENVOLVIMENTO CIENTÍFICO E TECNOLÓGICO (CNPq). \b Portaria nº 2.664, de 6 de março de 2026\b0: Diretrizes para uso de Inteligência Artificial Generativa em atividades de pesquisa e submissão acadêmica. Brasília: Ministério da Ciência, Tecnologia e Inovação, 2026.\par
+\vspace{120}
+CORMEN, Thomas H. et al. \b Algoritmos: teoria e prática\b0. 3. ed. Rio de Janeiro: Elsevier, 2012.\par
+\vspace{120}
+KARP, Richard M. Reducibility among combinatorial problems. \i In\i0: MILLER, Raymond E.; THATCHER, James W. (ed.). \b Complexity of Computer Computations\b0. New York: Plenum Press, 1972. p. 85-103.\par
+\vspace{120}
+KLEINBERG, Jon; TARDOS, Éva. \b Algorithm design\b0. Boston: Pearson/Addison-Wesley, 2006.\par
+\vspace{120}
+SOCIEDADE BRASILEIRA DE COMPUTAÇÃO (SBC). \b Instruções para autores de artigos da SBC\b0. Porto Alegre: SBC, 2024.}\par
+}
