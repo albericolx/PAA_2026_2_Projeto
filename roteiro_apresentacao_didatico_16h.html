@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Roteiro Didático de Apresentação — Tema 6: Motoboy (BeeCrowd 1286)</title>
+<style>
+    @page {
+        size: A4;
+        margin: 15mm 15mm 15mm 15mm;
+    }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 10pt;
+        line-height: 1.45;
+        color: #1e293b;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        color: #1e3a8a;
+        font-size: 15pt;
+        border-bottom: 2px solid #2563eb;
+        padding-bottom: 6px;
+        margin-top: 0;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    h2 {
+        color: #0f766e;
+        font-size: 11.5pt;
+        border-bottom: 1px solid #cbd5e1;
+        padding-bottom: 4px;
+        margin-top: 14px;
+        margin-bottom: 6px;
+        page-break-after: avoid;
+    }
+    h3 {
+        color: #1d4ed8;
+        font-size: 10.5pt;
+        margin-top: 8px;
+        margin-bottom: 4px;
+        page-break-after: avoid;
+    }
+    h4 {
+        color: #0369a1;
+        font-size: 10pt;
+        margin-top: 6px;
+        margin-bottom: 3px;
+        page-break-after: avoid;
+    }
+    p {
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+    blockquote {
+        margin: 5px 0;
+        padding: 8px 14px;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        font-family: "Georgia", serif;
+        font-style: italic;
+        color: #0f172a;
+        font-size: 9.5pt;
+        line-height: 1.45;
+        border-radius: 0 6px 6px 0;
+    }
+    ul, ol {
+        margin-top: 3px;
+        margin-bottom: 5px;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 2px;
+    }
+    code {
+        background-color: #f1f5f9;
+        color: #0f172a;
+        padding: 1px 4px;
+        border-radius: 4px;
+        font-family: Consolas, monospace;
+        font-size: 9pt;
+    }
+    hr {
+        border: 0;
+        height: 1px;
+        background-color: #e2e8f0;
+        margin: 10px 0;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<h1>🎯 ROTEIRO DIDÁTICO DE APRESENTAÇÃO — TEMA 6: MOTOBOY (BEECROWD 1286)</h1>
+<p><strong>Disciplina:</strong> Projeto e Análise de Algoritmos (PAA) — UFRPE 2026.2</p>
+<p><strong>Docente:</strong> Profª. Drª. Jeane Melo</p>
+<p><strong>Apresentador:</strong> José Albérico Rocha da Silva (<code>albericolx@gmail.com</code>)</p>
+<p><strong>Horário:</strong> 16:00 | <strong>Duração estimada:</strong> 14 a 18 minutos (+ 3 min de perguntas)</p>
+<p><strong>Links da Apresentação:</strong></p>
+<ul>
+<li>🌐 <strong>Simulador Web:</strong> <a href="https://albericolx.github.io/PAA_2026_2_Projeto/">albericolx.github.io/PAA_2026_2_Projeto</a></li>
+<li>💻 <strong>Código Oficial:</strong> <a href="https://github.com/albericolx/PAA_2026_2_Projeto/blob/main/code/solucao_beecrowd_1286.py">github.com/albericolx/PAA_2026_2_Projeto/blob/main/code/solucao_beecrowd_1286.py</a></li>
+</ul>
+<hr>
+<h2>🧭 POSTURA GERAL PARA A APRESENTAÇÃO</h2>
+<p>1. <strong>Respire e comece tranquilo:</strong> Seus colegas não são juízes; eles querem entender como resolver um problema prático sem se afogar em fórmulas matemáticas.</p>
+<p>2. <strong>A regra de ouro:</strong> Nunca mostre uma fórmula ou código sem antes contar a <strong>história</strong> ou o <strong>motivo</strong> que fez aquele código existir.</p>
+<p>3. <strong>Contato visual:</strong> Olhe nos olhos de três pontos da sala (esquerda, centro e direita). Use pausas dramáticas de 2 segundos após perguntas retóricas.</p>
+<hr>
+<h2>🍕 SLIDE 1: Capa e Boas-Vindas (1 minuto)</h2>
+<ul>
+<li><strong>Visual:</strong> Título do Tema 6, UFRPE, Profª Jeane Melo, seu nome.</li>
+<li><strong>Objetivo:</strong> Estabelecer empatia, quebrar o gelo e contextualizar o tema de forma leve.</li>
+</ul>
+<h3>🎙️ O Que Falar (Script Passo a Passo):</h3>
+<blockquote>
+<p><em>"Boa tarde, pessoal! Boa tarde, professora Jeane.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Hoje nós vamos resolver juntos um desafio clássico da computação, mas vestido com um problema super comum do nosso dia a dia aqui em Recife: <strong>como um motoboy de pizzaria pode organizar as entregas no seu baú para trabalhar o tempo máximo e faturar mais, sem violar o limite físico da sua moto?</strong></em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Esse é o problema <strong>1286 do BeeCrowd</strong>, e a técnica que vamos explorar para resolvê-lo da forma mais inteligente possível é a famosa <strong>Programação Dinâmica</strong>, modelando-o como uma <strong>Mochila Binária 0-1</strong>.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Vocês vão ver que, por trás de nomes complicados, a ideia central é incrivelmente simples: nunca recalcular o que você já descobriu. Vamos lá?"</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 2:</strong> <em>"Para começar, vamos olhar de perto o dilema desse motoboy..."</em></li>
+</ul>
+<hr>
+<h2>📦 SLIDE 2: O Problema: O Baú da Moto (1,5 a 2 minutos)</h2>
+<ul>
+<li><strong>Visual:</strong> Dados do problema: $N$ pedidos, tempo $t_i$, pizzas $p_i$, capacidade $P=10$, tabela com os 4 pedidos somando 17 pizzas.</li>
+<li><strong>Objetivo:</strong> Fazer a turma sentir a dor do problema. Mostrar por que métodos ingênuos (força bruta ou ganância) falham.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Imaginem a cena: sexta-feira à noite, a pizzaria está lotada. Chegaram <strong>4 pedidos</strong> para entrega, mas o motoboy só tem uma moto com um baú que aguenta no máximo <strong>10 pizzas</strong>.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Olhem a nossa tabela:</em></p>
+<p>- <em>O Pedido 1 tem 5 pizzas e leva 20 minutos.</em></p>
+<p>- <em>O Pedido 2 tem 7 pizzas e leva 70 minutos.</em></p>
+<p>- <em>O Pedido 3 tem 2 pizzas e leva 15 minutos.</em></p>
+<p>- <em>O Pedido 4 tem 3 pizzas e leva 25 minutos.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Se o motoboy tentasse levar tudo, ele precisaria carregar $5 + 7 + 2 + 3 = \mathbf{17	ext{ pizzas}}$. Mas o baú só cabe 10! Não cabe tudo. E tem uma regra sagrada: <strong>não existe meia entrega</strong>. Ou você entrega o pedido completo para o cliente, ou você não leva.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Agora eu pergunto a vocês: qual seria a primeira reação de alguém? 'Ah, vou ser guloso! Pego o pedido que dá mais tempo de cara: o Pedido 2 (70 min e 7 pizzas)'. Sobram 3 espaços. Nesses 3 espaços, cabe o Pedido 4 (3 pizzas, 25 min). Total: $70 + 25 = 95$ minutos.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Mas e se tivéssemos 20 pedidos com combinações diferentes? Testar todas as combinações na mão daria $2^{20}$, que é mais de um milhão de testes! Não dá para fazer no 'olhômetro'. Precisamos de um modelo formal."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 3:</strong> <em>"E como a ciência da computação enxerga esse baú de pizza? Como uma Mochila!"</em></li>
+</ul>
+<hr>
+<h2>🎒 SLIDE 3: Modelagem: É uma Mochila 0-1 (1,5 minuto)</h2>
+<ul>
+<li><strong>Visual:</strong> Comparação lado a lado (Motoboy vs Mochila Clássica), formulação matemática e citação a Richard Karp (1972).</li>
+<li><strong>Objetivo:</strong> Mostrar que problemas do mundo real se traduzem em problemas clássicos da literatura. Explicar o que significa "0-1" e por que é difícil (NP-completo).</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Olhem que interessante este paralelo:</em></p>
+<p>- <em>A capacidade do baú de $P$ pizzas é a <strong>capacidade $W$ da mochila</strong>.</em></p>
+<p>- <em>A quantidade de pizzas de cada pedido é o <strong>peso do item</strong> ($w_i$).</em></p>
+<p>- <em>O tempo de entrega é o <strong>valor do item</strong> ($v_i$) que queremos maximizar.</em></p>
+<p>- <em>E a decisão $x_i \in \{0, 1\}$ é a nossa chave: ou levamos o pedido ($1$), ou recusamos ($0$). Por isso se chama <strong>Mochila 0-1</strong>.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Em 1972, um cientista chamado Richard Karp provou que a Mochila 0-1 pertence aos problemas <strong>NP-completos</strong>. Isso significa que ninguém conhece um algoritmo milagroso que resolva esse problema em tempo polinomial perfeito para qualquer tamanho.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Porém, para os limites do mundo real — como o do nosso motoboy com até 30 pizzas — existe uma técnica espetacular que resolve em frações de milissegundo: a <strong>Programação Dinâmica</strong>."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 4:</strong> <em>"Mas de onde veio essa técnica? A história por trás dela é curiosa e divertida..."</em></li>
+</ul>
+<hr>
+<h2>📜 SLIDE 4: De Onde Vem a Programação Dinâmica? (1,5 minuto)</h2>
+<ul>
+<li><strong>Visual:</strong> Anos 1950, Guerra Fria, Richard Bellman, RAND Corporation, Princípio da Otimalidade.</li>
+<li><strong>Objetivo:</strong> Humanizar o conteúdo com uma história marcante e fixar o Princípio da Otimalidade com uma intuição simples.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Nos anos 1950, em plena Guerra Fria, um matemático brilhante chamado <strong>Richard Bellman</strong> trabalhava na <strong>RAND Corporation</strong>, desenvolvendo pesquisas para a Força Aérea americana.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Sabe por que a técnica se chama 'Programação Dinâmica'? Porque o Secretário de Defesa da época tinha aversão à palavra 'pesquisa' e não queria liberar dinheiro para matemáticos teorizarem. Bellman então pensou: 'Que palavras soam imponentes e não despertam desconfiança de nenhum político? Programação — que na época significava planejar — e Dinâmica — porque muda ao longo do tempo'. Foi quase uma estratégia de sobrevivência política para conseguir verba!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Mas a sacada matemática dele foi genial: o <strong>Princípio da Otimalidade de Bellman</strong>.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>O que ele diz? Imagine que você vai viajar do Recife para Caruaru pela melhor rota possível, passando por Gravatá. Se a rota inteira é ótima, o trecho entre Gravatá e Caruaru também TEM que ser a melhor rota possível a partir de Gravatá!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Em termos computacionais: <strong>um problema grande é formado por subproblemas menores. Se você resolve cada subproblema uma única vez e anota o resultado, você nunca mais precisa recalcular!</strong>"</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 5:</strong> <em>"E como Bellman traduziu isso em matemática para a nossa mochila de pizzas? Vejam a equação dele..."</em></li>
+</ul>
+<hr>
+<h2>🧠 SLIDE 5: A Equação de Bellman (2 minutos)</h2>
+<ul>
+<li><strong>Visual:</strong> Matriz $DP[i][w]$, caso não cabe, caso cabe ($\max(	ext{não levar}, 	ext{levar})$), casos base com zero, resposta em $DP[N][P]$.</li>
+<li><strong>Objetivo:</strong> Desmistificar a equação. Fazer cada estudante entender que são apenas 2 escolhas lógicas na vida do motoboy.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Não se assustem com a fórmula na tela. Ela nada mais é do que o diálogo que você teria com o motoboy:</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Definimos $DP[i][w]$ como: <strong>'Qual é o maior tempo que consigo entregar olhando os primeiros $i$ pedidos, se o meu baú tivesse espaço para apenas $w$ pizzas?'</strong></em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Para cada pedido que você olha, só existem duas situações possíveis:</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>1. <strong>Cenário 1 — Não cabe no baú ($p_i > w$):</strong></p>
+<p>   <em>Se o pedido tem 7 pizzas e o baú só tem espaço para 5, você não pode fazer nada a não ser dizer 'não'. Você simplesmente herda a melhor resposta da linha de cima: $DP[i][w] = DP[i-1][w]$.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>2. <strong>Cenário 2 — O pedido cabe ($p_i \le w$):</strong></p>
+<p>   <em>Agora você tem um poder de escolha! E você avalia duas opções:</em></p>
+<p>   - <strong>Opção A (Não levar):</strong> Fica com o resultado anterior: $DP[i-1][w]$.</p>
+<p>   - <strong>Opção B (Levar):</strong> Você ganha o tempo desse pedido ($t_i$) <strong>MAIS</strong> a melhor solução que você já tinha calculado para o espaço que sobra no baú: $w - p_i$ pizzas!</p>
+<p>   <em>E o que o algoritmo faz? Pega o $\max()$ entre as duas opções: a melhor vence!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>E os casos base? Se eu tenho 0 pedidos ou se o baú tem 0 de espaço, o ganho é zero. Começamos com zeros e vamos construindo a resposta até a última célula: $DP[N][P]$, que terá a perfeição matemática."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 6:</strong> <em>"Agora, como nós implementamos isso para rodar em milissegundos no juiz eletrônico do BeeCrowd?"</em></li>
+</ul>
+<hr>
+<h2>💻 SLIDE 6: Código e Complexidade: Otimização Espacial O(P) (2 minutos)</h2>
+<ul>
+<li><strong>Visual:</strong> Código Python compacto com vetor unidimensional <code>dp = [0] * (max_pizzas + 1)</code>, iteração decrescente <code>range(max_pizzas, pizzas - 1, -1)</code>, complexidades $\Theta(N \cdot P)$ e $O(P)$.</li>
+<li><strong>Objetivo:</strong> Explicar a 'sacada' da otimização de memória. Por que varrer ao contrário evita duplicar pedidos.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Muitas pessoas aprendem programação dinâmica construindo uma matriz 2D com linhas e colunas. Isso é ótimo para visualizar, mas consome memória $O(N \cdot P)$.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Reparem neste código Python de apenas 7 linhas:</em></p>
+<p>- <em>Nós alocamos <strong>apenas um vetor de 1 dimensão</strong>: <code>dp = [0] </em> (max_pizzas + 1)</code>. Para 30 pizzas, são apenas 31 números na memória! Isso é espaço $O(P)$, minúsculo!*</p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Agora prestem muita atenção nesta linha:</em></p>
+<p><code>for w in range(max_pizzas, pizzas - 1, -1):</code></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Por que nós estamos percorrendo as pizzas de trás para frente, de 10 descendo até o tamanho do pedido?</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Essa é a <strong>pergunta clássica de prova de PAA</strong>:</em></p>
+<p><em>Se nós percorrêssemos para frente (de 0 até 10), ao atualizar uma capacidade maior, estaríamos consultando um valor que acabou de ser alterado na mesma rodada! Isso significaria permitir que o mesmo pedido fosse colocado duas ou três vezes no baú — o que resolveria a 'Mochila Ilimitada', mas violaria a regra da Mochila 0-1!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Ao varrer de trás para frente, garantimos que qualquer valor consultado veio obrigatoriamente da rodada anterior. Cada pedido entra no máximo uma única vez!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Complexidade? São no máximo $20 	imes 30 = 600$ operações básicas. Para um computador que faz 100 milhões de operações por segundo, isso roda em piscar de olhos."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 7:</strong> <em>"Vamos ver o fluxo visual dessa lógica em diagrama de blocos..."</em></li>
+</ul>
+<hr>
+<h2>🔄 SLIDE 7: Fluxograma do Algoritmo (1 a 1,5 minuto)</h2>
+<ul>
+<li><strong>Visual:</strong> 4 blocos de fluxo (Alocação -> Laço Externo -> Varredura Reversa -> Decisão de Bellman) e retornos.</li>
+<li><strong>Objetivo:</strong> Reforçar a lógica visual para quem aprende melhor com diagramas do que com código.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Este fluxograma sintetiza toda a execução do nosso programa:</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>1. <strong>Bloco 1:</strong> <em>Inicializamos nosso vetor unidimensional com zeros na memória.</em></p>
+<p>2. <strong>Bloco 2 (Laço Externo):</strong> <em>Enquanto houver pedidos na lista da pizzaria, pegamos o próximo pedido com seu tempo e suas pizzas.</em></p>
+<p>3. <strong>Bloco 3 (Laço Interno Reverso):</strong> <em>Iniciamos $w$ na capacidade máxima do baú e vamos descendo até o limite em que o pedido ainda cabe.</em></p>
+<p>4. <strong>Bloco 4 (Decisão de Bellman In-Place):</strong> <em>Avaliamos: <code>dp[w - pizzas] + tempo > dp[w]</code>?</em></p>
+<p>   - <em>Se <strong>SIM</strong>: atualizamos a célula na hora: venceu levar o pedido!</em></p>
+<p>   - <em>Se <strong>NÃO</strong>: mantemos o que estava antes, porque a combinação prévia já era mais vantajosa.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Quando todos os pedidos são processados, a posição final do vetor já guarda o tempo máximo ótimo absoluto."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 8:</strong> <em>"E para que ninguém tenha que apenas imaginar essa matriz funcionando, nós desenvolvemos um simulador web interativo ao vivo!"</em></li>
+</ul>
+<hr>
+<h2>🌐 SLIDE 8: Demonstração ao Vivo no Simulador Web (2,5 a 3 minutos) — [CLÍMAX DA APRESENTAÇÃO]</h2>
+<ul>
+<li><strong>Visual:</strong> Screenshot do simulador, links públicos no GitHub Pages e GitHub Code, roteiro dos 4 passos.</li>
+<li><strong>Ação:</strong> Projetar a aba do simulador no navegador (<code>albericolx.github.io/PAA_2026_2_Projeto</code>).</li>
+<li><strong>Objetivo:</strong> Mostrar o funcionamento prático, a construção da matriz e a auditoria do backtracking.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>(Abre o navegador no link ou mostra o slide enquanto projeta)</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>"Para comprovar visualmente como a matemática acontece, este é o nosso <strong>Simulador Visual Interativo</strong>, hospedado publicamente no GitHub Pages.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>(Navegando no simulador ou apontando os passos):</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>1. <strong>Passo 1 (Cenário Real):</strong> <em>Aqui estão os nossos dados: Capacidade $P=10$ e os 4 pedidos de exemplo.</em></p>
+<p>2. <strong>Passo 2 (Construção da Matriz):</strong> <em>Ao clicarmos em 'Executar Tudo', o algoritmo preenche a matriz de Programação Dinâmica diante dos nossos olhos. Vejam que o resultado final na última célula é exatamente <strong>95 minutos</strong>!</em></p>
+<p>3. <strong>Passo 3 (O Segredo do Backtracking):</strong> <em>Agora vem a pergunta de 1 milhão de dólares: <strong>'Como o algoritmo sabe QUAIS pedidos levar para dar esses 95 minutos?'</strong></em></p>
+<p>   <em>Ao clicar em 'Avançar Backtracking', o algoritmo faz o caminho inverso, da última célula para o início:</em></p>
+<p>   - <em>Na linha 4 (Pedido 4): o valor é 95, mas na linha de cima era 85. Mudou! Logo, <strong>o Pedido 4 (25 min, 3 pizzas) FOI ESCOLHIDO!</strong> Sobram $10 - 3 = 7$ pizzas de espaço.</em></p>
+<p>   - <em>Vamos para a linha 3 com 7 pizzas: o valor é 70, e na linha de cima também era 70. Não mudou! Logo, <strong>o Pedido 3 foi DESCARTADO!</strong> O espaço continua 7.</em></p>
+<p>   - <em>Na linha 2 com 7 pizzas: o valor é 70, mas na linha de cima era 20. Mudou! Logo, <strong>o Pedido 2 (70 min, 7 pizzas) FOI ESCOLHIDO!</strong> Espaço restante: $7 - 7 = 0$.</em></p>
+<p>   - <em>Resultado: Pedidos 2 e 4 selecionados: $70 + 25 = 95	ext{ minutos}$ e $7 + 3 = 10	ext{ pizzas}$ cravadas no baú!</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Também deixamos disponível no slide o link direto para o código-fonte em Python oficial no repositório, com comentários didáticos linha a linha."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 9:</strong> <em>"Mas a Programação Dinâmica não serve só para entregar pizza. Onde mais nós a usamos sem perceber?"</em></li>
+</ul>
+<hr>
+<h2>🌍 SLIDE 9: Onde a Programação Dinâmica Aparece no Dia a Dia? (1,5 a 2 minutos)</h2>
+<ul>
+<li><strong>Visual:</strong> 6 aplicações modernas: GPS/Trânsito, Delivery/Logística, Corretor e Git diff, Bioinformática, Nuvem e Reconhecimento de Voz.</li>
+<li><strong>Objetivo:</strong> Conectar a teoria da disciplina com a indústria e com as ferramentas que os colegas usam diariamente.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Vejam como a Programação Dinâmica está rodando nos nossos bolsos e servidores neste exato momento:</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>1. <strong>GPS e Aplicativos de Trânsito (Waze, Google Maps):</strong> <em>Algoritmos como Dijkstra e Bellman-Ford encontram o caminho mais rápido recalculando sub-rotas sem precisar testar os bilhões de caminhos possíveis.</em></p>
+<p>2. <strong>Delivery e Empacotamento (iFood, Rappi, Amazon):</strong> <em>O problema do nosso motoboy é a base do Problema de Roteamento de Veículos (VRP), que define quais encomendas colocar na van de entrega sob restrição de peso e volume.</em></p>
+<p>3. <strong>Git Diff e Corretores Ortográficos:</strong> <em>Quando vocês dão <code>git diff</code> e veem as linhas verdes e vermelhas, o Git está rodando o algoritmo LCS (Maior Subsequência Comum) via Programação Dinâmica para encontrar a menor quantidade de mudanças!</em></p>
+<p>4. <strong>Bioinformática e Medicina:</strong> <em>Os algoritmos de Smith-Waterman alinham sequências de DNA e RNA para encontrar mutações genéticas e parentesco evolutivo.</em></p>
+<p>5. <strong>Computação em Nuvem (AWS, Google Cloud):</strong> <em>Empacotar centenas de máquinas virtuais e contêineres Docker dentro do menor número de servidores físicos para economizar energia é a variação Bin Packing da mochila.</em></p>
+<p>6. <strong>Reconhecimento de Voz (Siri, Alexa):</strong> <em>O Dynamic Time Warping (DTW) alinha o sinal de áudio se você falar rápido ou devagar, casando os fonemas por programação dinâmica.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Tudo isso bebe da mesmíssima fonte de Richard Bellman."</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 10:</strong> <em>"Chegamos então aos nossos resultados finais e conclusões..."</em></li>
+</ul>
+<hr>
+<h2>🏆 SLIDE 10: Resultados e Conclusões (1,5 minuto)</h2>
+<ul>
+<li><strong>Visual:</strong> Veredito Accepted no BeeCrowd (0,095s), três pilares (Modelar, Resolver, Comprovar), contato e agradecimento.</li>
+<li><strong>Objetivo:</strong> Fechar com chave de ouro, demonstrar rigor acadêmico e sucesso na submissão.</li>
+</ul>
+<h3>🎙️ O Que Falar:</h3>
+<blockquote>
+<p><em>"Para consolidar nosso trabalho:</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p>- <strong>Modelamos:</strong> <em>Transformamos um problema real de entregas na formulação formal da Mochila 0-1.</em></p>
+<p>- <strong>Resolvemos:</strong> <em>Implementamos a recorrência ótima com compactação espacial em $O(P)$ e complexidade pseudo-polinomial $\Theta(N \cdot P)$.</em></p>
+<p>- <strong>Comprovamos:</strong> <em>Submetemos ao juiz online oficial do BeeCrowd e obtivemos <strong>ACCEPTED</strong> com tempo de execução de apenas <strong>0,095 segundos</strong>, menos de um décimo do limite de 1 segundo estipulado pela plataforma.</em></p>
+<p>- <em>E além disso, entregamos o simulador web e o relatório técnico completo para auditar a tomada de decisão via backtracking.</em></p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><em>Agradeço a atenção de todos vocês e a orientação da professora Jeane. Estou aberto a dúvidas e perguntas!"</em></p>
+</blockquote>
+<ul>
+<li><strong>Transição para o Slide 11:</strong> <em>(Apenas passe para as referências e deixe visível enquanto responde perguntas).</em></li>
+</ul>
+<hr>
+<h2>📚 SLIDE 11: Referências (Enquanto responde perguntas)</h2>
+<ul>
+<li>Deixe este slide de fundo enquanto a professora e os colegas fazem perguntas.</li>
+<li>Se alguém perguntar sobre a complexidade: mencione Cormen e Kleinberg-Tardos.</li>
+<li>Se alguém perguntar sobre a história: mencione a autobiografia de Bellman (1984), <em>Eye of the Hurricane</em>.</li>
+</ul>
+<hr>
+<h2>💡 PERGUNTAS QUE A PROFESSORA OU COLEGAS PODEM FAZER (E SUAS RESPOSTAS PREPARADAS):</h2>
+<p>1. <strong>Pergunta:</strong> <em>"Por que a complexidade é chamada de 'pseudo-polinomial' e não polinomial pura?"</em></p>
+<ul>
+<li><strong>Sua Resposta:</strong> <em>"Excelente pergunta! Ela é $\Theta(N \cdot P)$, onde $N$ é o número de itens e $P$ é a capacidade. Mas o tamanho da entrada na memória para representar o número $P$ não é $P$, e sim $\log_2(P)$ bits. Quando um algoritmo depende do valor numérico da entrada e não apenas da quantidade de bits, dizemos que ele é pseudo-polinomial. Para valores razoáveis de $P$ (como $P \le 30$), ele é extremamente veloz."</em></li>
+</ul>
+<p>2. <strong>Pergunta:</strong> <em>"O que aconteceria se a gente varresse o vetor $w$ em ordem crescente em vez de decrescente?"</em></p>
+<ul>
+<li><strong>Sua Resposta:</strong> <em>"Se varrêssemos em ordem crescente, um item poderia ser somado a ele mesmo em capacidades maiores na mesma iteração, permitindo que o motoboy levasse duas ou mais pizzas do mesmo pedido. Isso resolveria a Mochila Não-Limitada (Unbounded Knapsack), mas violaria a regra de ouro da Mochila 0-1, onde cada pedido só pode ser levado no máximo uma vez."</em></li>
+</ul>
+<p>3. <strong>Pergunta:</strong> <em>"Por que o algoritmo guloso (ordenar por tempo/pizzas) não funciona para a Mochila 0-1?"</em></p>
+<ul>
+<li><strong>Sua Resposta:</strong> <em>"O algoritmo guloso funciona perfeitamente para a Mochila Fracionária, onde podemos cortar itens. Mas na Mochila 0-1, pegar um item com alta densidade pode deixar um espaço 'morto' no baú que não cabe mais nada, enquanto duas peças menores poderiam preencher o baú perfeitamente e somar um tempo maior. Só a Programação Dinâmica garante a solução ótima global."</em></li>
+</ul>
+</body>
+</html>
